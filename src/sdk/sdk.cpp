@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -42,7 +42,7 @@ static ISELanguageManager _language_manager;
 
 const sclchar *PLACEHOLDER_MAIN_KEYBOARD_NAME = "abc";
 
-class CSDKISE : public ISCLUIEventCallback, public ILanguageCallback
+class CSDKISE : public ILanguageCallback
 {
 public :
     CSDKISE() {
@@ -269,7 +269,7 @@ sclboolean CSDKISE::on_language_selected(const sclchar *language, const sclchar 
                         gSCLUI->set_autocapital_shift_state(TRUE);
                     }
                     /* And set the url postfixes */
-                    for (sclint inner_loop = 0;inner_loop < (sizeof(url_postfixes) / sizeof (const char *));inner_loop++) {
+                    for (size_t inner_loop = 0; inner_loop < (sizeof(url_postfixes) / sizeof (const char *)); inner_loop++) {
                         std::string postfix = url_postfixes[inner_loop];
                         std::string::size_type offset = postfix.find(replace_target, 0);
 
@@ -337,7 +337,6 @@ sclboolean CSDKISE::flush_imengine(const sclchar *language)
 {
     bool bRet = false;
 
-    sclint loop;
     if (g_ise_common) {
         int lang_id = get_lang_id(language);
         if (lang_id != -1) {

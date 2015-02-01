@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -36,8 +36,12 @@
 #include "option.h"
 #include "common.h"
 #include "languages.h"
-
+#include "candidate-factory.h"
+#define CANDIDATE_WINDOW_HEIGHT 84
 using namespace scl;
+#include <vector>
+using namespace std;
+
 CSCLUI *gSCLUI = NULL;
 extern CISECommon *g_ise_common;
 extern CONFIG_VALUES g_config_values;
@@ -51,6 +55,31 @@ KEYBOARD_STATE g_keyboard_state = {
     TRUE,
     FALSE,
 };
+
+Candidate *g_candidate = NULL;
+class CandidateEventListener: public EventListener
+{
+    public:
+        void on_event(const EventDesc &desc)
+        {
+            const MultiEventDesc &multidesc = dynamic_cast<const MultiEventDesc &>(desc);
+            switch (multidesc.type) {
+                case MultiEventDesc::CANDIDATE_ITEM_MOUSE_DOWN:
+                    g_ise_common->select_candidate(multidesc.index);
+                    break;
+                case MultiEventDesc::CANDIDATE_MORE_VIEW_SHOW:
+                    // when more parts shows, click on the candidate will
+                    // not affect the key click event
+                    gSCLUI->disable_input_events(TRUE);
+                    break;
+                case MultiEventDesc::CANDIDATE_MORE_VIEW_HIDE:
+                    gSCLUI->disable_input_events(FALSE);
+                    break;
+                default: break;
+            }
+        }
+};
+static CandidateEventListener g_candidate_event_listener;
 
 static ISELanguageManager _language_manager;
 #define MVK_Shift_L 0xffe1
@@ -72,7 +101,7 @@ class CUIEventCallback : public ISCLUIEventCallback
 public :
     SCLEventReturnType on_event_key_clicked(SclUIEventDesc event_desc);
     SCLEventReturnType on_event_drag_state_changed(SclUIEventDesc event_desc);
-    SCLEventReturnType on_event_notification(SCLUINotiType notiType, sclint etcInfo);
+    SCLEventReturnType on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info);
 };
 
 static CUIEventCallback callback;
@@ -180,22 +209,23 @@ on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_t
 }
 
 
-SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_type, sclint etc_info)
+SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info)
 {
     SCLEventReturnType ret = SCL_EVENT_PASS_ON;
 
     if (noti_type == SCL_UINOTITYPE_SHIFT_STATE_CHANGE) {
         if (g_need_send_shift_event) {
             LANGUAGE_INFO *info = _language_manager.get_language_info(_language_manager.get_current_language());
-            if (info) {
+            SclNotiShiftStateChangeDesc *desc = static_cast<SclNotiShiftStateChangeDesc*>(etc_info);
+            if (info && desc) {
                 if (info->accepts_caps_mode) {
-                    if (etc_info == SCL_SHIFT_STATE_OFF) {
+                    if (desc->shift_state == SCL_SHIFT_STATE_OFF) {
                         ise_send_event(MVK_Shift_Off, scim::SCIM_KEY_NullMask);
                     }
-                    else if (etc_info == SCL_SHIFT_STATE_ON) {
+                    else if (desc->shift_state == SCL_SHIFT_STATE_ON) {
                         ise_send_event(MVK_Shift_On, scim::SCIM_KEY_NullMask);
                     }
-                    else if (etc_info == SCL_SHIFT_STATE_LOCK) {
+                    else if (desc->shift_state == SCL_SHIFT_STATE_LOCK) {
                         ise_send_event(MVK_Shift_Lock, scim::SCIM_KEY_NullMask);
                     }
                     ret = SCL_EVENT_PASS_ON;
@@ -258,8 +288,8 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                     if (event_desc.key_event == MVK_Shift_L) {
                         g_need_send_shift_event = TRUE;
                     }
-               }
-               break;
+                }
+                break;
            }
         case KEY_TYPE_MODECHANGE:
             if (on_input_mode_changed(event_desc.key_value, event_desc.key_event, event_desc.key_type)) {
@@ -404,8 +434,6 @@ ise_show(int ic)
         }
 
         if (reset_inputmode) {
-            int loop;
-
             ise_reset_context();
 
             /* Turn the shift state off if we need to reset our input mode, only when auto-capitalization is not set  */
@@ -458,6 +486,7 @@ ise_show(int ic)
         gSCLUI->disable_input_events(FALSE);
     }
 
+    g_candidate->show();
     g_keyboard_state.visible_state = TRUE;
 }
 
@@ -469,6 +498,9 @@ ise_set_screen_rotation(int degree)
 {
     if (gSCLUI) {
         gSCLUI->set_rotation(DEGREE_TO_SCLROTATION(degree));
+    }
+    if (g_candidate) {
+        g_candidate->rotate(degree);
     }
 }
 
@@ -488,6 +520,9 @@ ise_hide()
         gSCLUI->hide();
     }
     g_keyboard_state.visible_state = FALSE;
+    if (g_candidate) {
+        g_candidate->hide();
+    }
 }
 
 void
@@ -527,6 +562,11 @@ ise_create()
             if (!succeeded) {
                 gSCLUI->init((sclwindow)g_ise_common->get_main_window(), scl_parser_type, MAIN_ENTRY_XML_PATH);
             }
+            // FIXME whether to use global var, need to check
+            if (g_candidate == NULL) {
+                g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_ise_common->get_main_window());
+            }
+            g_candidate->add_event_listener(&g_candidate_event_listener);
             gSCLUI->set_longkey_duration(elm_config_longpress_timeout_get() * 1000);
 
             /* Default ISE callback */
@@ -560,9 +600,15 @@ void
 ise_destroy()
 {
     if (gSCLUI) {
+        LOGD("calling gSCLUI->fini()");
         gSCLUI->fini();
+        LOGD("deleting gSCLUI");
         delete gSCLUI;
         gSCLUI = NULL;
+    }
+    if (g_candidate) {
+        delete g_candidate;
+        g_candidate = NULL;
     }
 }
 
@@ -655,15 +701,18 @@ void ise_set_return_key_type(unsigned int type)
     case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SIGNIN:
         snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_SIGNIN);
         break;
+    default:
+        break;
     }
 
     if (type == ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DEFAULT) {
         gSCLUI->unset_private_key("Enter");
     } else {
         static sclchar *imagelabel[SCL_BUTTON_STATE_MAX] = {
-            " ", " ", " "
+           const_cast<sclchar*>(" "), const_cast<sclchar*>(" "), const_cast<sclchar*>(" ")
         };
-        gSCLUI->set_private_key("Enter", buf, imagelabel, NULL, 0, "Enter", TRUE);
+
+        gSCLUI->set_private_key("Enter", buf, imagelabel, NULL, 0, const_cast<sclchar*>("Enter"), TRUE);
     }
 }
 
@@ -679,5 +728,12 @@ void ise_get_language_locale(char **locale)
         if(!(info->locale_string.empty())) {
             *locale = strdup(info->locale_string.c_str());
         }
+    }
+}
+
+void ise_update_table(const vector<string> &vec_str)
+{
+    if (g_candidate) {
+        g_candidate->update(vec_str);
     }
 }

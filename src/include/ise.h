@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -26,7 +26,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif  /*  */
-
+#include <vector>
+#include <string>
 #include "languages.h"
 
 #define ISE_VERSION "1.0.8-1"
@@ -85,13 +86,13 @@ const ISE_DEFAULT_VALUES g_ise_default_values[ISE_LAYOUT_STYLE_MAX] = {
     {"NUMONLY_3X4",	"DEFAULT",		FALSE },	/* ISE_LAYOUT_STYLE_DATETIME */
 };
 
-#define ISE_RETURN_KEY_LABEL_DONE dgettext("sys_string", "IDS_COM_BODY_DONE")
-#define ISE_RETURN_KEY_LABEL_GO gettext("IDS_IME_OPT_GO_ABB")
-#define ISE_RETURN_KEY_LABEL_JOIN gettext("IDS_IME_OPT_JOIN_M_SIGN_IN")
-#define ISE_RETURN_KEY_LABEL_LOGIN gettext("IDS_IME_OPT_LOG_IN_ABB")
-#define ISE_RETURN_KEY_LABEL_NEXT dgettext("sys_string", "IDS_COM_SK_NEXT")
+#define ISE_RETURN_KEY_LABEL_DONE   gettext("IDS_IME_SK_DONE_ABB")
+#define ISE_RETURN_KEY_LABEL_GO     gettext("IDS_IME_OPT_GO_ABB")
+#define ISE_RETURN_KEY_LABEL_JOIN   gettext("IDS_IME_OPT_JOIN_M_SIGN_IN")
+#define ISE_RETURN_KEY_LABEL_LOGIN  gettext("IDS_IME_OPT_LOG_IN_ABB")
+#define ISE_RETURN_KEY_LABEL_NEXT   dgettext("sys_string", "IDS_COM_SK_NEXT")
 #define ISE_RETURN_KEY_LABEL_SEARCH dgettext("sys_string", "IDS_COM_BODY_SEARCH")
-#define ISE_RETURN_KEY_LABEL_SEND dgettext("sys_string", "IDS_COM_SK_SEND")
+#define ISE_RETURN_KEY_LABEL_SEND   dgettext("sys_string", "IDS_COM_SK_SEND")
 #define ISE_RETURN_KEY_LABEL_SIGNIN dgettext("sys_string", "IDS_COM_HEADER_SIGN_IN")
 
 typedef struct {
@@ -126,5 +127,6 @@ void ise_update_cursor_position(int position);
 void ise_set_return_key_type(unsigned int type);
 void ise_set_return_key_disable(unsigned int disabled);
 void ise_get_language_locale(char **locale);
+void ise_update_table(const std::vector<std::string> &vec_str);
 
 #endif

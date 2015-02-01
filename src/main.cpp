@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -24,6 +24,8 @@
 #include <scl.h>
 #include "common.h"
 #include "ise.h"
+#include <vector>
+using namespace std;
 
 using namespace scim;
 using namespace scl;
@@ -69,6 +71,7 @@ class CCoreEventCallback : public IISECommonEventCallback
 
     void set_imdata (sclchar *buf, sclu32 len);
     void get_language_locale (sclint ic, sclchar **locale);
+    void update_lookup_table(LookupTable& table);
 };
 
 void CCoreEventCallback::init()
@@ -191,6 +194,19 @@ void CCoreEventCallback::get_language_locale(sclint ic, sclchar **locale)
     ise_get_language_locale(locale);
 }
 
+void CCoreEventCallback::update_lookup_table(LookupTable &table)
+{
+    vector<string> vec_str;
+    //printf("candidate num: %d, current_page_size: %d\n",
+    //    table.number_of_candidates(), table.get_current_page_size());
+    for (int i = 0; i < table.get_current_page_size(); ++i)
+    {
+        WideString wcs = table.get_candidate_in_current_page(i);
+        String str = utf8_wcstombs(wcs);
+        vec_str.push_back(str);
+    }
+    ise_update_table(vec_str);
+}
 
 static CCoreEventCallback g_core_event_callback;
 

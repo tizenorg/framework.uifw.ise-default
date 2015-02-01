@@ -1,14 +1,14 @@
 /*
- * Copyright 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -31,9 +31,9 @@
 
 #include "common.h"
 #include "ise.h"
-
+#include "candidate-factory.h"
 #define IMDATA_STRING_MAX_LEN 256
-
+#define CANDIDATE_WINDOW_HEIGHT 84
 using namespace scl;
 
 CISECommon* CISECommon::m_instance = NULL; /* For singleton */
@@ -187,7 +187,6 @@ void accessibility_changed_cb(keynode_t *key, void* data)
 static Eina_Bool _client_message_cb (void *data, int type, void *event)
 {
     Ecore_X_Event_Client_Message *ev = (Ecore_X_Event_Client_Message *)event;
-    int angle;
 
     IISECommonEventCallback *callback = NULL;
     CISECommon *common = CISECommon::get_instance();
@@ -273,13 +272,15 @@ void CISECommon::run(const sclchar *uuid, const scim::ConfigPointer &config, con
     int argc = 3;
 
     argv [0] = const_cast<char *> (m_helper_info.name.c_str());
-    argv [1] = (char *)"--display";
+    argv [1] = const_cast<char *> ("--display");
     argv [2] = const_cast<char *> (display);
     argv [3] = 0;
 
     m_config = config;
 
     elm_init(argc, argv);
+
+    elm_policy_set (ELM_POLICY_THROTTLE, ELM_POLICY_THROTTLE_NEVER);
 
     m_main_window = elm_win_add(NULL, "Tizen Keyboard", ELM_WIN_UTILITY);
 
@@ -288,7 +289,6 @@ void CISECommon::run(const sclchar *uuid, const scim::ConfigPointer &config, con
     elm_win_keyboard_win_set(m_main_window, EINA_TRUE);
     elm_win_autodel_set(m_main_window, EINA_TRUE);
     elm_win_title_set(m_main_window, "Tizen Keyboard");
-
     unsigned int set = 1;
     ecore_x_window_prop_card32_set(elm_win_xwindow_get(m_main_window),
         ECORE_X_ATOM_E_WINDOW_ROTATION_SUPPORTED,
@@ -357,13 +357,6 @@ void CISECommon::run(const sclchar *uuid, const scim::ConfigPointer &config, con
     if (fd_handler) {
         ecore_main_fd_handler_del(fd_handler);
     }
-
-    /* Would the below code needed? */
-    /*
-    if (m_event_callback) {
-        m_event_callback->exit();
-    }
-    */
 
     elm_shutdown();
 
@@ -466,6 +459,12 @@ void CISECommon::forward_key_event(sclint ic, const sclchar *ic_uuid, sclu32 key
     event.mask = keymask;
     m_helper_agent.forward_key_event(ic, uuid, event);
 }
+
+void CISECommon::select_candidate(int index)
+{
+    m_helper_agent.select_candidate(index);
+}
+
 
 void CISECommon::commit_string(sclint ic, const sclchar *ic_uuid, const sclchar *str)
 {
@@ -985,6 +984,16 @@ void slot_update_candidate_table_page_size (const scim::HelperAgent *, int ic, c
     }
 }
 
+void slot_update_lookup_table (const scim::HelperAgent *, scim::LookupTable &table) {
+    CISECommon *impl = CISECommon::get_instance();
+    if (impl) {
+        IISECommonEventCallback *callback = impl->get_core_event_callback();
+        if (callback) {
+            callback->update_lookup_table(table);
+        }
+    }
+}
+
 void slot_select_associate (const scim::HelperAgent *agent, int ic, const scim::String &uuid, int index) {
     CISECommon *impl = CISECommon::get_instance();
     if (impl) {
@@ -1104,6 +1113,7 @@ void CISECommon::register_slot_functions()
     m_helper_agent.signal_connect_candidate_table_page_up (scim::slot (slot_candidate_table_page_up));
     m_helper_agent.signal_connect_candidate_table_page_down (scim::slot (slot_candidate_table_page_down));
     m_helper_agent.signal_connect_update_candidate_table_page_size (scim::slot (slot_update_candidate_table_page_size));
+    m_helper_agent.signal_connect_update_lookup_table (scim::slot (slot_update_lookup_table));
     m_helper_agent.signal_connect_select_associate (scim::slot (slot_select_associate));
     m_helper_agent.signal_connect_associate_table_page_up (scim::slot (slot_associate_table_page_up));
     m_helper_agent.signal_connect_associate_table_page_down (scim::slot (slot_associate_table_page_down));
