@@ -1,47 +1,64 @@
 Name:       ise-default
 Summary:    Tizen keyboard
-Version:    0.3.027
+Version:    1.0.8
 Release:    1
-Group:      TO_BE/FILLED_IN
-License:    Flora Software License
-Source0:    %{name}-%{version}.tar.gz
-Source1001: packaging/ise-default.manifest
-Requires(post): /sbin/ldconfig, /bin/ln
+Group:      Graphics & UI Framework/Input
+License:    Apache-2.0
+Source0:    ise-default-%{version}.tar.gz
+Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
-BuildRequires: libgcrypt-devel
-BuildRequires: gettext-tools
-BuildRequires: pkgconfig(elementary)
-BuildRequires: pkgconfig(utilX)
-BuildRequires: pkgconfig(isf)
-BuildRequires: pkgconfig(vconf)
-BuildRequires: pkgconfig(heynoti)
-BuildRequires: pkgconfig(sensor)
-BuildRequires: pkgconfig(x11)
+BuildRequires:  gettext-tools
+BuildRequires:  edje-bin
+BuildRequires:  cmake
+BuildRequires:  pkgconfig(elementary)
+BuildRequires:  pkgconfig(utilX)
+BuildRequires:  pkgconfig(isf)
+BuildRequires:  pkgconfig(vconf)
+BuildRequires:  pkgconfig(aul)
+BuildRequires:  pkgconfig(dlog)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(libscl-ui)
+BuildRequires:  pkgconfig(ecore-imf)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(efl-assist)
+
+
 
 %description
 Description: Tizen keyboard
 
 
+
 %prep
 %setup -q
 
+
 %build
-cp %{SOURCE1001} .
-./bootstrap
-PREFIX="%{_prefix}"; export PREFIX
-%configure --disable-static --prefix=%{_prefix}
+export CFLAGS+=" -DTIZEN_DEBUG_ENABLE"
+export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE"
+export FFLAGS+=" -DTIZEN_DEBUG_ENABLE"
+
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 
 make %{?jobs:-j%jobs}
 
-
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/license
+cp LICENSE %{buildroot}/usr/share/license/%{name}
+
 %make_install
 
-%files
-%manifest ise-default.manifest
-%defattr(-,root,root,-) 
-%{_libdir}/scim-1.0/1.4.0/*
+%post
+
+%postun
+
+%files 
+%defattr(-,root,root,-)
+%{_libdir}/scim-1.0/1.4.0/Helper/ise-default.so
+%{_libdir}/scim-1.0/1.4.0/SetupUI/ise-default-setup.so
 %{_datadir}/isf/ise/ise-default/*
-%{_datadir}/scim/icons/*
+%{_datadir}/packages/*
 %{_datadir}/locale/*
+/usr/share/license/%{name}
+

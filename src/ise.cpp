@@ -1,1628 +1,819 @@
 /*
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.tizenopensource.org/license
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-
-#define Uses_SCIM_UTILITY
-#define Uses_SCIM_OBJECT
-#define Uses_SCIM_POINTER
-#define Uses_SCIM_EVENT
-#define Uses_SCIM_HELPER
-#define Uses_SCIM_CONFIG_BASE
-
-#define USE_EFL
-
-/* use EFL*/
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <scim.h>
 
 #include <Ecore_X.h>
 #include <Ecore_IMF.h>
 #include <Elementary.h>
-#include <mcf.h>
 
 #include <X11/XF86keysym.h>
 
 #include <vconf.h>
 #include <vconf-keys.h>
 
+#include "scl.h"
 #include "ise.h"
-#include "isedata.h"
-#include "ise-default-setting.h"
-#include "languagesetting.h"
-#include "include/strtbl.h"
+#include "utils.h"
+#include "option.h"
+#include "common.h"
+#include "languages.h"
+#include "candidate-factory.h"
+#define CANDIDATE_WINDOW_HEIGHT 84
+using namespace scl;
+#include <vector>
+using namespace std;
 
-#include "mcfcore.h"
-#include "mcfresource.h"
-#include "include/window_slide_animator.h"
+CSCLUI *gSCLUI = NULL;
+extern CISECommon *g_ise_common;
+extern CONFIG_VALUES g_config_values;
+static sclboolean g_need_send_shift_event = FALSE;
 
-using namespace scim;
-using namespace mcf;
-
-#ifndef SETUP_BUILD
-SETTING_INFO _setup_info;
-std::vector < int >v_lang_list;
-#endif
-
-Evas_Object *box = NULL;
-
-ConfigPointer _scim_config;
-
-Evas_Object *main_window = NULL;
-HelperAgent helper_agent;
-
-CMCFCore *gCore = NULL;
-
-static mcf8 gFKeypadMode = INITIAL_KEYPAD_MODE;
-static mcf8 gInitialInputMode = NOT_USED;
-static mcf32 gPrevInputContext = -1;
-static bool gFLayoutChanged = FALSE;
-static bool gFPrivateKeySet = FALSE;
-static mcfu32 gIseLayout;
-static bool gFLayoutSetting = FALSE;
-static mcfu32 gLastIseLayout = -1;
-static mcfulong prevKeyEvent = NOT_USED;
-int gIseScreenDegree = 0;
-static int gIseScreenDegreeBackup;
-static Ecore_Timer *release_block_timer_id;
-int gExplicitLanguageSetting = NOT_USED;
-static ISEPrivateKeyBuffer gPrivateKeyBuffer[ISE_PRIVATE_KEY_BUFFER_SIZE];
-int gDisableKeyBuffer[MAX_KEY];
-static ISELastInputContext gLatestInputContext;
-static mcfboolean gFInputContextSet = FALSE;
-static bool gFDisplaySetting = FALSE;
-bool gFHiddenState = TRUE;
-bool gFEffectEnabled = TRUE;
-static int prevInputMode = NOT_USED;
-static int prevDispMode = MCFDISPLAY_MAX;
-static bool prevPrivkeySet = FALSE;
-int gExternalShiftLockMode = FALSE;
-MCFKeyModifier gPrevModifier = KEY_MODIFIER_NONE;
-mcfchar *gPrevMultitapValue = NULL;
-Ecore_Timer *release_block_timer_id_for_shift = NULL;
-mcfint privateId = FALSE;
-
-bool email_app_check = FALSE;
-Evas_Object* ctxspopup = NULL;
-
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-Virtual_Keyboard_State g_virt_keybd_state = KEYPAD_STATE_UNKNOWN;
-#endif
-
-static int create_main_window();
-
-int g_currentLanguage = 0;
-int g_cursor_position = 0;
-
-extern bool IseLangDataSelectState[MAX_LANG_NUM];
-
-/**
-*  * This callback class will receive all response events from MCF
-*   * So you should perform desired tasks in this class.
-*    */
-class CEventCallback:public IMCFEventCallback {
- public:mcfboolean on_event_key_clicked(McfKeyEventDesc keyEventDesc);
-	mcfboolean on_event_drag_state_changed(McfKeyEventDesc keyEventDesc) {
-		return FALSE;
-	}
-	mcfboolean on_event_notification(MCFNotiType notiType, mcfint etcInfo);
+KEYBOARD_STATE g_keyboard_state = {
+    0,
+    0,
+    ISE_LAYOUT_STYLE_NORMAL,
+    0,
+    FALSE,
+    TRUE,
+    FALSE,
 };
 
-CKesslerISEDecorator decorator;
+#define ISE_LAYOUT_NUMBERONLY_VARIATION_MAX 4
+const sclchar *g_ise_numberonly_variation_name[ISE_LAYOUT_NUMBERONLY_VARIATION_MAX] = {
+    "DEFAULT", "SIG", "DEC", "SIGDEC"
+};
 
-static CEventCallback callback;
+#define SIG_DEC_SIZE        2
+static scluint              _click_count = 0;
+static const char          *_sig_dec[SIG_DEC_SIZE] = {".", "-"};
+static scluint              _sig_dec_event[SIG_DEC_SIZE] = {'.', '-'};
+static Ecore_Timer         *_commit_timer = NULL;
 
-static void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType keyType);
-
-static void _on_process_user_defined_keys(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType keyType);
-
-static void ise_send_string(mcfchar * keyValue);
-static void ise_update_preedit_string(mcfchar * str);
-static void ise_send_event(mcfulong keyEvent, mcfulong keyMask = 0);
-static void ise_forward_key_event(mcfulong keyEvent);
-
-static void _set_prediction_private_key();
-static void _set_backspace_private_key();
-static void _set_shift_private_key();
-
-static void ise_set_screen_rotation(int degree);
-
-static void write_config(void)
+Candidate *g_candidate = NULL;
+class CandidateEventListener: public EventListener
 {
-	_scim_config->write(CONFIG_SETTING_FLAG, _setup_info.flag);
-	_scim_config->write(CONFIG_LANGUAGE_LIST, v_lang_list);
-	_scim_config->write(CONFIG_CURRENT_LANGUAGE, _setup_info.current_language);
-	_scim_config->write(CONFIG_LANGUAGE_COUNT, _setup_info.lang_count);
-	_scim_config->flush();
-}
-
-static void setting_window_cb(SETTING_INFO info)
-{
-#ifdef SUPPORTS_MULTIPLE_LANGUAGE_SELECTION
-	int current_index = g_currentLanguage;
-	int count = 0;
-	while (!IseLangDataSelectState[current_index] && count < MAX_LANG_NUM) {
-		current_index++;
-		if (current_index >= MAX_LANG_NUM) {
-			current_index = 0;
-		}
-		count++;
-	}
-
-	if (current_index != g_currentLanguage) {
-		ise_set_language(current_index);
-	}
-#endif
-
-	_setup_info.current_language = g_currentLanguage;
-
-	write_config();
-
-}
-
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-static void _ise_get_size(struct rectinfo &info)
-{
-	int x, y, width, height;
-
-	info.pos_x = 0;
-	info.pos_y = 0;
-	info.width = 0;
-	info.height = 0;
-	if (main_window) {
-		ecore_evas_geometry_get(ecore_evas_ecore_evas_get
-					(evas_object_evas_get(main_window)), &x,
-					&y, NULL, NULL);
-		gCore->get_window_size(&width, &height);
-
-		mcfint win_w, win_h;
-		if (gCore) {
-			gCore->get_screen_resolution(&win_w, &win_h);
-		}
-
-		if (gIseScreenDegree == 90 || gIseScreenDegree == 270) {
-			Evas_Coord temp = win_w;
-			win_w = win_h;
-			win_h = temp;
-		}
-
-		info.pos_x = (win_w - width) / 2;
-
-		if (gFHiddenState) {
-			info.pos_y = win_h;
-		} else {
-			info.pos_y = win_h - (height);
-		}
-
-		info.width = width;
-		info.height = (height);
-	}
-}
-
-void _send_keypad_geom_atom_info(Evas_Object * window, Virtual_Keyboard_State kbd_state)
-{
-	Ecore_X_Window zone, xwin;
-	struct rectinfo info;
-
-	if ((kbd_state == KEYPAD_STATE_UNKNOWN) || (kbd_state == g_virt_keybd_state))
-		return;
-
-	g_virt_keybd_state = kbd_state;
-	xwin = elm_win_xwindow_get(window);
-	zone = ecore_x_e_illume_zone_get(xwin);
-	memset(&info, 0, sizeof(struct rectinfo));
-
-	_ise_get_size(info);
-	if (kbd_state == KEYPAD_STATE_ON) {
-		ecore_x_e_virtual_keyboard_state_set(zone,
-							ECORE_X_VIRTUAL_KEYBOARD_STATE_ON);
-		ecore_x_e_illume_keyboard_geometry_set(zone, info.pos_x,
-							info.pos_y, info.width,
-							info.height);
-	} else {
-		ecore_x_e_virtual_keyboard_state_set(zone,
-							ECORE_X_VIRTUAL_KEYBOARD_STATE_OFF);
-		ecore_x_e_illume_keyboard_geometry_set(zone, info.pos_x,
-							info.pos_y, 0, 0);
-	}
-}
-#endif
-
-static Eina_Bool release_block_timer_event(void *data)
-{
-	send_flush();
-	return ECORE_CALLBACK_CANCEL;
-}
-
-/* For adding delay in Abc Mode */
-static Eina_Bool release_block_timer_event_for_shift(void *data)
-{
-	gCore->set_shift_state(MCF_SHIFT_STATE_OFF);
-	change_shiftmode(SHIFTMODE_OFF);
-	prevKeyEvent = NOT_USED;
-	return 0;
-}
-
-mcfboolean CEventCallback::on_event_notification(MCFNotiType notiType,
-						 mcfint etcInfo)
-{
-	if (notiType == NOTITYPE_GESTURE_FLICK) {
-		if (etcInfo == DRAG_DOWN) {
-			{
-				if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
-					ise_hide(TRUE);
-				}
-			}
-		}
-	}
-}
-
-mcfboolean CEventCallback::on_event_key_clicked(McfKeyEventDesc keyEventDesc)
-{
-#ifdef DEBUG_MODE
-	static bool autotest = FALSE;
-	static mcfulong keySeq[3];
-
-	keySeq[0] = keySeq[1];
-	keySeq[1] = keySeq[2];
-	keySeq[2] = keyEventDesc.keyEvent;
-
-	if (autotest) {
-		if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
-			autotest = FALSE;
-		}
-	} else if (keySeq[0] == MVK_D && keySeq[1] == MVK_B && keySeq[2] == MVK_G) {
-		gCore->set_debug_mode(DEBUGMODE_AUTOTEST);
-		autotest = TRUE;
-	}
-#endif
-
-	if (keyEventDesc.keyModifier == KEY_MODIFIER_MULTITAP_START) {
-		if (gPrevMultitapValue)
-			ise_send_string(gPrevMultitapValue);
-
-		ise_update_preedit_string(keyEventDesc.keyValue);
-		gPrevMultitapValue = keyEventDesc.keyValue;
-	} else if (keyEventDesc.keyModifier == KEY_MODIFIER_MULTITAP_REPEAT) {
-		ise_update_preedit_string(keyEventDesc.keyValue);
-		gPrevMultitapValue = keyEventDesc.keyValue;
-	} else if (gPrevModifier == KEY_MODIFIER_MULTITAP_START
-			|| gPrevModifier == KEY_MODIFIER_MULTITAP_REPEAT) {
-		if (gPrevMultitapValue)
-			ise_send_string(gPrevMultitapValue);
-
-		ise_update_preedit_string("");
-		gPrevMultitapValue = NULL;
-	}
-	gPrevModifier = keyEventDesc.keyModifier;
-
-	if (keyEventDesc.keyEvent == MVK_space) {
-		if (keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_LEFT ||
-						keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_LEFT_RETURN) {
-			keyEventDesc.keyEvent = MVK_KP_Left;
-		}
-
-		if (keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_RIGHT ||
-						keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_RIGHT_RETURN) {
-			keyEventDesc.keyEvent = MVK_KP_Right;
-		}
-	}
-
-	static mcfchar *prevLongKeySym = 0;
-	static mcfint prevLongKeyCode = 0;
-
-	DBG("\non_event_key_clicked : %d\n", keyEventDesc.keyModifier);
-
-	if (keyEventDesc.keyModifier == KEY_MODIFIER_LONGKEY) {
-		if (keyEventDesc.keyType == KEY_TYPE_CHAR) {
-			keyEventDesc.keyType = KEY_TYPE_UNICODE;
-		}
-	}
-
-	switch (keyEventDesc.keyType) {
-	case KEY_TYPE_UNICODE:
-	case KEY_TYPE_SYMBOL:
-		if ((gLatestInputContext.keyType == KEY_TYPE_CHAR)
-		    || (keyEventDesc.keyEvent == MVK_at)
-		    || (keyEventDesc.keyEvent == MVK_slash)) {
-			/* It will request flush processing to  ise if the user type
-			 * UNICODE after typing CHAR(Composing style) */
-			DBG("\n\n Last input context is key type char \n\n");
-			send_flush();
-		}
-
-        if (keyEventDesc.keyEvent == MVK_period) {
-          if (keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_LEFT) {
-            ise_send_string(",");
-          } else if (keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_RIGHT) {
-            ise_send_string("!");
-          } else if (keyEventDesc.keyModifier == KEY_MODIFIER_DIRECTION_UP) {
-            ise_send_string("?");
-          } else if (keyEventDesc.keyModifier == KEY_MODIFIER_LONGKEY){
-            send_flush();
-          } else {
-            ise_send_string(".");
-	      }
+    public:
+        void on_event(const EventDesc &desc)
+        {
+            const MultiEventDesc &multidesc = dynamic_cast<const MultiEventDesc &>(desc);
+            switch (multidesc.type) {
+                case MultiEventDesc::CANDIDATE_ITEM_MOUSE_DOWN:
+                    g_ise_common->select_candidate(multidesc.index);
+                    break;
+                case MultiEventDesc::CANDIDATE_MORE_VIEW_SHOW:
+                    // when more parts shows, click on the candidate will
+                    // not affect the key click event
+                    gSCLUI->disable_input_events(TRUE);
+                    break;
+                case MultiEventDesc::CANDIDATE_MORE_VIEW_HIDE:
+                    gSCLUI->disable_input_events(FALSE);
+                    break;
+                default: break;
+            }
         }
-        else if (keyEventDesc.keyModifier != KEY_MODIFIER_MULTITAP_START &&
-		    keyEventDesc.keyModifier != KEY_MODIFIER_MULTITAP_REPEAT) {
-			if (keyEventDesc.keyEvent) {
-				ise_forward_key_event(keyEventDesc.keyEvent);
-			} else {
-				ise_send_string(keyEventDesc.keyValue);
-			}
-		}
-		break;
-	case KEY_TYPE_CHAR:
-	case KEY_TYPE_CONTROL:
-		if (keyEventDesc.keyEvent > UD_MVK_START
-		    && keyEventDesc.keyEvent < UD_MVK_END) {
-			_on_process_user_defined_keys(keyEventDesc.keyValue,
-										keyEventDesc.keyEvent,
-										keyEventDesc.keyType);
-		} else {
-			if(keyEventDesc.keyType == KEY_TYPE_CHAR) {
-				ise_send_string(keyEventDesc.keyValue);
-			}
-			else {
-				ise_send_event(keyEventDesc.keyEvent);
-			}
-		}
-		break;
-	case KEY_TYPE_MODECHANGE:
-		if ((keyEventDesc.keyModifier == KEY_MODIFIER_LONGKEY) &&
-				(keyEventDesc.keyEvent != UD_MVK_KEYPAD)) {
-			/* Take care of menu for longpress for QTY keyboard only */
-			_on_process_user_defined_keys(keyEventDesc.keyValue,
-										keyEventDesc.keyEvent,
-										keyEventDesc.keyType);
-		} else {	/* Take care of change-language in short press */
-			_on_input_mode_changed(keyEventDesc.keyValue,
-										keyEventDesc.keyEvent,
-										keyEventDesc.keyType);
-		}
-		break;
-	default:
-		break;
-	}
+};
+static CandidateEventListener g_candidate_event_listener;
 
-	if (keyEventDesc.keyEvent != UD_MVK_SHIFT) {
-		if (get_Ise_default_context().KeypadMode == KEYPAD_QWERTY) {
-			if (get_Ise_default_context().ShiftMode == SHIFTMODE_ON) {
-				/* Even when a key was pressed, do not turn off
-				 * shift mode if external CAPS_MODE is set */
-				if (!gExternalShiftLockMode) {
-					gCore->set_shift_state(MCF_SHIFT_STATE_OFF);
-					helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-													ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
-					change_shiftmode(SHIFTMODE_OFF);
-				}
-			}
-		}
-	}
+static ISELanguageManager _language_manager;
+#define MVK_Shift_L 0xffe1
+#define MVK_Caps_Lock 0xffe5
+#define MVK_Shift_Off 0xffe1
+#define MVK_Shift_On 0xffe2
+#define MVK_Shift_Lock 0xffe6
+#define MVK_Shift_Enable 0x9fe7
+#define MVK_Shift_Disable 0x9fe8
 
-	/* Saves the latest context */
-	gLatestInputContext.keyValue = keyEventDesc.keyValue;
-	gLatestInputContext.keyEvent = keyEventDesc.keyEvent;
-	gLatestInputContext.keyType = keyEventDesc.keyType;
-
-	return TRUE;
-}
-
-void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType keyType)
-{
-	mcfboolean bShowCloseWindow = TRUE;
-	mcf8 mode = NOT_USED;
-	static int email_flag = 0;
-
-	int current_index = g_currentLanguage;
-
-	int count = 0;
-	mcfint prevWinWidth, prevWinHeight;
-	gCore->get_window_size(&prevWinWidth, &prevWinHeight);
-
-	gCore->set_update_pending(TRUE);
-
-	switch (keyEvent) {
-	case UD_MVK_OPTION_WINDOW:
-		send_flush();
-		if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
-			_setup_info.current_language = g_currentLanguage;
-			_show_option_window_ise(main_window, gIseScreenDegree,
-						_setup_info, setting_window_cb);
-		}
-		break;
-	case UD_MVK_LANG_CHANGE:
-				if(_setup_info.lang_count == 1)
-					_show_option_window_ise(main_window, gIseScreenDegree, _setup_info, setting_window_cb);
-				else if(_setup_info.lang_count == 2) {
-					send_flush();
-					do {
-						count++;
-						current_index++;
-						if (current_index >= MAX_LANG_NUM) {
-							/*IseLangDataSelectState[0] = true;*/
-							current_index = 0;
-						}
-					} while((!IseLangDataSelectState[current_index]) && (count < MAX_LANG_NUM));
-
-					if(current_index != g_currentLanguage) {
-						ise_set_language(current_index);
-						g_currentLanguage = current_index;
-					}
-				}
-				helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_LANGUAGE_EVENT, 0);
-		break;
-	case UD_MVK_123:
-		send_flush();
-		ise_send_string(keyValue);
-		mode = INPUT_MODE_4X4_NUM;
-		if (mcf_check_arrindex(gInitialInputMode, MAX_INPUT_MODE)) {
-			if (IseDefaultInputModes[gInitialInputMode][2] != NOT_USED) {
-				mode = IseDefaultInputModes[gInitialInputMode][2];
-			}
-		}
-		gCore->set_input_mode(mode);
-		break;
-	case UD_MVK_SYM:
-		ise_send_event(MVK_FLUSH);
-		gCore->set_input_mode(mcfInputSymModeKeypad[0][get_Ise_default_context().KeypadMode]);
-		break;
-	case UD_MVK_ABC:
-		send_flush();
-		mode = mcfInputModeByLanguage[KEYPAD_QWERTY][g_currentLanguage];
-		gCore->set_input_mode(mode);
-		break;
-	case UD_MVK_NEXTSYM:{
-
-			mcf8 inputmode = gCore->get_input_mode();
-
-			/*removed symbol page 3 according to latest spec*/
-			if (inputmode == INPUT_MODE_QTY_SYM_1)
-				gCore->set_input_mode(INPUT_MODE_QTY_SYM_2);
-			if (inputmode == INPUT_MODE_QTY_SYM_2)
-				gCore->set_input_mode(INPUT_MODE_QTY_SYM_1);
-		}
-		break;
-	case UD_MVK_PREVSYM:{
-
-			mcf8 inputmode = gCore->get_input_mode();
-
-			/*removed symbol page 3 according to latest spec*/
-			if (inputmode == INPUT_MODE_QTY_SYM_1)
-				gCore->set_input_mode(INPUT_MODE_QTY_SYM_2);
-			if (inputmode == INPUT_MODE_QTY_SYM_2)
-				gCore->set_input_mode(INPUT_MODE_QTY_SYM_1);
-		}
-		break;
-	}
-
-	mcf8 language = NOT_USED;
-	if (mode >= 0 && mode < MAX_INPUT_MODE) {
-		language = mcfLanguageByInputMode[mode];
-	}
-
-	if (get_Ise_default_context().Language != language && language != NOT_USED) {
-		change_ldb_option(language);
-	}
-
-	if (gExternalShiftLockMode) {
-		if (gCore->get_input_mode() == INPUT_MODE_QTY_ENGLISH ||
-			gCore->get_input_mode() == INPUT_MODE_QTY_URL ||
-			gCore->get_input_mode() == INPUT_MODE_QTY_EMAIL) {
-				change_shiftmode(SHIFTMODE_ON);
-		}
-	}
-
-	mcfboolean forceShiftOff = FALSE;
-
-	if (get_Ise_default_context().ShiftMode == SHIFTMODE_ON && !forceShiftOff) {
-		gCore->set_shift_state(MCF_SHIFT_STATE_ON);
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-	} else if (get_Ise_default_context().ShiftMode == SHIFTMODE_LOCK && !forceShiftOff) {
-		gCore->set_shift_state(MCF_SHIFT_STATE_LOCK);
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-	} else {
-		if (!forceShiftOff)
-			change_shiftmode(SHIFTMODE_OFF);
-		gCore->set_shift_state(MCF_SHIFT_STATE_OFF);
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
-	}
-
-	gCore->set_update_pending(FALSE);
-	prevInputMode = gCore->get_input_mode();
-	prevDispMode = gCore->get_display_mode();
-
-	if (bShowCloseWindow) {
-		int width, height;
-		gCore->get_window_size(&width, &height);
-		decorator.finish_show_animation(width, height, gIseScreenDegree);
-	}
-
-	ise_update_cursor_position(g_cursor_position);
-	_set_backspace_private_key();
-
-	for (int loop = 0; loop < MAX_KEY; loop++) {
-		if (gDisableKeyBuffer[loop] != NOT_USED) {
-			gCore->disable_button(gCore->find_keyidx_by_customid(-1, -1, gDisableKeyBuffer[loop]));
-		}
-	}
-
-	mcfint winWidth, winHeight;
-	gCore->get_window_size(&winWidth, &winHeight);
-
-	if (prevWinWidth != winWidth || prevWinHeight != winHeight) {
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_GEOMETRY_EVENT, 0);
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-		_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_ON);
-#endif
-	}
-}
-
-void _on_process_user_defined_keys(mcfchar * keyValue, mcfulong keyEvent,
-			      MCFKeyType keyType)
-{
-	mcf8 curInputMode = MAX_INPUT_MODE;
-	if (gCore) {
-		curInputMode = gCore->get_input_mode();
-	}
-
-	int current_index = (g_currentLanguage + 1) % MAX_LANG_NUM;
-	int count = 0;
-	CMCFUtils *utils = CMCFUtils::get_instance();
-
-	switch (keyEvent) {
-	case UD_MVK_OPTION_WINDOW:
-		send_flush();
-		if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
-			_setup_info.current_language = g_currentLanguage;
-			_show_option_window_ise(main_window, gIseScreenDegree,
-							_setup_info, setting_window_cb);
-		}
-		break;
-	case UD_MVK_SHIFT:
-		gCore->set_update_pending(TRUE);
-
-		if (get_Ise_default_context().ShiftMode == SHIFTMODE_OFF) {
-			change_shiftmode(SHIFTMODE_ON);
-			gCore->set_shift_state(MCF_SHIFT_STATE_ON);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-		} else if (get_Ise_default_context().ShiftMode == SHIFTMODE_ON) {
-			change_shiftmode(SHIFTMODE_LOCK);
-			gCore->set_shift_state(MCF_SHIFT_STATE_LOCK);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-			if (get_Ise_default_context().CompletionMode == COMPLETION_AMBIGUOUS_LOWERCASE_STRING
-				|| get_Ise_default_context().CompletionMode == COMPLETION_AMBIGUOUS_CAMELCASE_STRING)
-					change_completion_option(COMPLETION_AMBIGUOUS_UPPERCASE_STRING);
-
-			if (get_Ise_default_context().CompletionMode == COMPLETION_MULTITAB_LOWERCASE_STRING
-			    || get_Ise_default_context().CompletionMode == COMPLETION_MULTITAB_CAMELCASE_STRING)
-				change_completion_option(COMPLETION_MULTITAB_UPPERCASE_STRING);
-		} else {
-			change_shiftmode(SHIFTMODE_OFF);
-			gCore->set_shift_state(MCF_SHIFT_STATE_OFF);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-								ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
-			if (get_Ise_default_context().CompletionMode == COMPLETION_AMBIGUOUS_UPPERCASE_STRING)
-				change_completion_option(COMPLETION_AMBIGUOUS_LOWERCASE_STRING);
-
-			if (get_Ise_default_context().CompletionMode == COMPLETION_MULTITAB_UPPERCASE_STRING)
-				change_completion_option(COMPLETION_MULTITAB_LOWERCASE_STRING);
-		}
-
-		gCore->set_update_pending(FALSE, TRUE);
-		break;
-	case UD_MVK_LANG_CHANGE:
-		send_flush();
-		while (!IseLangDataSelectState[current_index]
-			&& count < MAX_LANG_NUM) {
-			current_index++;
-
-			if (current_index >= MAX_LANG_NUM) {
-				current_index = 0;
-			}
-		}
-
-		if (current_index != g_currentLanguage) {
-			ise_set_language(current_index);
-		}
-		break;
-	case UD_MVK_OK:
-		/*ise_forward_key_event(keyEvent);*/
-		ise_forward_key_event(XF86XK_UserPB);
-		break;
-	case UD_MVK_MORE:
-		/*ise_forward_key_event(keyEvent);*/
-		ise_forward_key_event(XF86XK_User1KB);
-		break;
-	case UD_MVK_HIDE:
-		ise_forward_key_event(XF86XK_User2KB);
-		ise_hide(TRUE);
-		break;
-	case UD_MVK_CHANGEISE:
-		uint32 withUI = 1;
-		break;
-	}
-}
-
-static void _set_prediction_private_key()
-{
-	mcf8 mode = gCore->get_input_mode();
-	mcf8 layout = -1;
-	if (gCore->get_display_mode() == MCFDISPLAY_PORTRAIT) {
-		layout = mcf_input_mode_configure[mode].layoutId[0];
-	} else {
-		layout = mcf_input_mode_configure[mode].layoutId[1];
-	}
-
-	/* Make sure prediction option is set off */
-	if (get_Ise_default_context().OnOff == OFF) {
-		change_prediction_onoff(FALSE);
-	} else {
-		change_prediction_onoff(TRUE);
-	}
-}
-
-static void _set_backspace_private_key()
-{
-	mcf8 mode = gCore->get_input_mode();
-	mcf8 layout = -1;
-	if (gCore->get_display_mode() == MCFDISPLAY_PORTRAIT) {
-		ise_set_private_key(CUSTOMID_BACKSPACE, NULL, "B09_icon_back.png", MVK_BackSpace, NULL);
-	} else {
-		ise_set_private_key(CUSTOMID_BACKSPACE, NULL, "B09_icon_back_50x50.png", MVK_BackSpace, NULL);
-	}
-}
+#define USER_KEYSTRING_OPTION "OPTION"
 
 /*
-*	_setup_info update on exit of setting menu
-* 	It will be called before launching of keyboard
-*/
-SETTING_INFO ise_setting_update_on_reload_config(SETTING_INFO _setup_info)
+ * This callback class will receive all response events from SCL
+ * So you should perform desired tasks in this class.
+ */
+class CUIEventCallback : public ISCLUIEventCallback
 {
-	CMCFUtils *utils = CMCFUtils::get_instance();
-	SETTING_INFO info;
-	info = _setup_info;
-	return info;
+public :
+    SCLEventReturnType on_event_key_clicked(SclUIEventDesc event_desc);
+    SCLEventReturnType on_event_drag_state_changed(SclUIEventDesc event_desc);
+    SCLEventReturnType on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info);
+};
+
+static CUIEventCallback callback;
+
+sclboolean
+check_ic_temporary(int ic)
+{
+    if ((ic & 0xFFFF) == 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /**
-* Send the given string to input framework
-*/
-static void ise_send_string(mcfchar * keyValue)
+ * Send the given string to input framework
+ */
+void
+ise_send_string(const sclchar *key_value)
 {
-	helper_agent.commit_string(-1, "", scim::utf8_mbstowcs(keyValue));
+    int ic = -1;
+    if (!check_ic_temporary(g_keyboard_state.ic)) {
+        ic = g_keyboard_state.ic;
+    }
+    g_ise_common->hide_preedit_string(ic, "");
+    g_ise_common->commit_string(ic, "", key_value);
+    LOGD("ic : %x, %s", ic, key_value);
 }
 
 /**
 * Send the preedit string to input framework
 */
-static void ise_update_preedit_string(mcfchar * str)
+void
+ise_update_preedit_string(const sclchar *str)
 {
-	AttributeList temp;
-	helper_agent.update_preedit_string(-1, "", scim::utf8_mbstowcs(str), temp);
-	if (strlen(str) == 0) {
-		helper_agent.hide_preedit_string(-1, "");
-	} else {
-		helper_agent.show_preedit_string(-1, "");
-	}
+    int ic = -1;
+    if (!check_ic_temporary(g_keyboard_state.ic)) {
+        ic = g_keyboard_state.ic;
+    }
+    g_ise_common->update_preedit_string(ic, "", str);
+    LOGD("ic : %x, %s", ic, str);
 }
 
 /**
 * Send the given event to input framework
 */
-static void ise_send_event(mcfulong keyEvent, mcfulong keyMask)
+void
+ise_send_event(sclulong key_event, sclulong key_mask)
 {
-	KeyEvent key(keyEvent, keyMask);
-	KeyEvent key_release(keyEvent, SCIM_KEY_ReleaseMask);
-	helper_agent.send_key_event(-1, "", key);
-	helper_agent.send_key_event(-1, "", key_release);
-}
-
-static void ise_forward_key_event(mcfulong keyEvent)
-{
-	KeyEvent key(keyEvent, 0);
-	KeyEvent key_release(keyEvent, SCIM_KEY_ReleaseMask);
-	helper_agent.forward_key_event(-1, "", key);
-	helper_agent.forward_key_event(-1, "", key_release);
+    int ic = -1;
+    if (!check_ic_temporary(g_keyboard_state.ic)) {
+        ic = g_keyboard_state.ic;
+    }
+    g_ise_common->send_key_event(ic, "", key_event, scim::SCIM_KEY_NullMask);
+    g_ise_common->send_key_event(ic, "", key_event, scim::SCIM_KEY_ReleaseMask);
+    LOGD("ic : %x, %x", ic, key_event);
 }
 
 /**
-* At ISE show, it will be called
-* In this func,  related variable will set to default for layout
-* See header file
+* Forward the given event to input framework
 */
-void ise_set_layout(mcfu32 layoutIdx)
+void
+ise_forward_key_event(sclulong key_event)
 {
-	MCF_DEBUG();
-	/* Check if the layoutIdx is in the valid range */
-	if (layoutIdx >= MAX_ISE_LAYOUT_CNT)
-		layoutIdx = 0;
-
-	if (gLastIseLayout != layoutIdx) {
-		gFLayoutChanged = TRUE;
-	} else {
-		gFLayoutChanged = FALSE;
-	}
-	gIseLayout = layoutIdx;
-	gFLayoutSetting = TRUE;
+    int ic = -1;
+    if (!check_ic_temporary(g_keyboard_state.ic)) {
+        ic = g_keyboard_state.ic;
+    }
+    g_ise_common->forward_key_event(ic, "", key_event, scim::SCIM_KEY_NullMask);
+    g_ise_common->forward_key_event(ic, "", key_event, scim::SCIM_KEY_ReleaseMask);
+    LOGD("ic : %x, %x", ic, key_event);
 }
 
-mcfu32 ise_get_layout()
-{
-	return gIseLayout;
-}
-
-static int create_main_window()
-{
-	PERF_TEST_START("create_main_window()");
-	mcfint win_w, win_h;
-
-	/* Create window and set the attribute of window */
-	main_window = elm_win_add(NULL, "ISE_WINDOW", ELM_WIN_BASIC);
-	elm_win_alpha_set(main_window, EINA_TRUE);
-
-	elm_win_borderless_set(main_window, EINA_TRUE);
-
-	elm_win_keyboard_win_set(main_window, EINA_TRUE);
-
-	/* Set font
-	evas = evas_object_evas_get(main_window);
-	evas_font_path_prepend(evas, "/usr/share/SLP/fonts");*/
-
-	box = elm_box_add(main_window);
-	evas_object_size_hint_weight_set(box, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_win_resize_object_add(main_window, box);
-
-	decorator.create();
-	decorator.set_target_window(main_window);
-
-	/* get window size */
-	if (gCore) {
-		gCore->get_screen_resolution(&win_w, &win_h);
-	}
-
-	PERF_TEST_END("create_main_window()");
-
-	return EXIT_SUCCESS;
-}
-
-void render_flush_post_cb(void *data, Evas * e, void *event_info)
-{
-	mcfint width = -1;
-	mcfint height = -1;
-	gCore->get_window_size(&width, &height);
-
-	if (gFEffectEnabled) {
-		decorator.start_show_animation(width, height, gIseScreenDegree);
-	} else {
-		int posx, posy;
-
-		CWindowSlideAnimator::get_window_pos_by_rotation(width, height,
-													gIseScreenDegree,
-													&posx, &posy,
-													NULL, NULL);
-		evas_object_move(main_window, posx, posy);
-
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_STATE_EVENT,
-										ECORE_IMF_INPUT_PANEL_STATE_SHOW);
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-		_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_ON);
-#endif
-	}
-	evas_object_show(main_window);
-
-	evas_event_callback_del(e, EVAS_CALLBACK_RENDER_FLUSH_POST, render_flush_post_cb);
-}
-
-void ise_show(int ic)
-{
-	mcfboolean bRotated = FALSE;
-	mcfboolean bShouldUpdate = FALSE;
-
-	mcfint width = -1;
-	mcfint height = -1;
-
-	if (gCore == NULL)
-		ise_new();
-
-	mcf_assert_return(gCore);
-
-	if (ise_get_layout() == ISE_LAYOUT_STYLE_EMAIL) {
-		email_app_check = TRUE;
-	}
-
-	if (!gFLayoutSetting) {
-		gIseLayout = ISE_LAYOUT_STYLE_NORMAL;
-		ise_set_layout(gIseLayout);
-	}
-
-	gLastIseLayout = gIseLayout;
-	mcf8 mcfInputMode = gCore->get_input_mode();
-	mcf32 langID = PRIMARY_LANGUAGE_INDEX;
-	mcf8 newInputMode = NOT_USED;
-	mcf8 language = NOT_USED;
-
-	if (mcf_check_arrindex(_setup_info.current_language, MAX_LANG_NUM)) {
-		langID = _setup_info.current_language;
-	}
-
-	gCore->set_update_pending(TRUE);
-
-	if (gIseScreenDegreeBackup != gIseScreenDegree) {
-		_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_OFF);
-		evas_object_move(main_window, -10000, -10000);
-		ise_set_screen_rotation(gIseScreenDegree);
-		gFDisplaySetting = FALSE;
-		bRotated = TRUE;
-	}
-
-	if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
-		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-	} else if (gIseLayout ==  ISE_LAYOUT_STYLE_URL) {
-		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-	} else if (gIseLayout ==  ISE_LAYOUT_STYLE_EMAIL) {
-		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-	} else {
-		mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
-	}
-
-	if (gFKeypadMode && gIseScreenDegree != 90
-			&& gIseScreenDegree != 270) {
-			newInputMode = IseDefaultInputModes[mcfInputMode][0];
-	} else {
-			newInputMode = IseDefaultInputModes[mcfInputMode][1];
-	}
-
-	if (newInputMode != NOT_USED) {
-		mcfInputMode = newInputMode;
-	}
-
-	if (mcfInputMode >= 0 && mcfInputMode < MAX_INPUT_MODE) {
-		g_currentLanguage = langID;
-		IseLangDataSelectState[g_currentLanguage] = true;
-		change_ldb_option(internalLangToLang[langID]);
-		change_keypad((uint32)IseKeypadMode[mcfInputMode]
-					[(gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) ? 1 : 0]);
-
-		if (ic != gPrevInputContext) {
-			change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
-		}
-
-		gCore->set_input_mode(mcfInputMode, TRUE);
-
-		mcf8 subLayoutID = IseDefaultValue[gIseLayout].subLayoutID;
-		if(gCore->get_cur_sublayout_id() != subLayoutID)
-		{
-			gCore->set_cur_sublayout_id(subLayoutID);
-			bShouldUpdate = TRUE;
-		}
-
-		if (ic != gPrevInputContext) {
-			gInitialInputMode = mcfInputMode;
-		}
-
-		language = mcfLanguageByInputMode[mcfInputMode];
-	}
-
-	if (get_Ise_default_context().Language != language
-		&& language != NOT_USED) {
-		change_ldb_option(language);
-	}
-
-	if (TRUE &&
-#ifdef SUPPORTS_LAYOUT_STYLE_MONTH
-		gCore->get_input_mode() != INPUT_MODE_4X4_MONTH &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_NUMBERONLY
-		gCore->get_input_mode() != INPUT_MODE_4X4_NUMONLY &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_IP
-		gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
-#endif
-		TRUE) {
-		_set_prediction_private_key();
-	}
-
-	/* We need to set shift state after setting input mode,
-		since setting input mode restores shift state back to off */
-	if(gExternalShiftLockMode) {
-		change_shiftmode(SHIFTMODE_ON);
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-				ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-		if (gCore->get_shift_state() != MCF_SHIFT_STATE_ON) {
-			gCore->set_shift_state(MCF_SHIFT_STATE_ON);
-			bShouldUpdate = TRUE;
-		}
-	} else {
-		change_shiftmode(IseDefaultValue[gIseLayout].ShiftMode);
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-				(IseDefaultValue[gIseLayout].ShiftMode == SHIFTMODE_OFF)
-				? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-		if (IseDefaultValue[gIseLayout].ShiftMode != gCore->get_shift_state()) {
-			gCore->set_shift_state((MCFShiftState)IseDefaultValue[gIseLayout].ShiftMode);
-			bShouldUpdate = TRUE;
-		}
-	}
-
-	if (ic != gPrevInputContext || gFLayoutChanged || !gFInputContextSet
-		|| bRotated || (g_currentLanguage != gExplicitLanguageSetting
-		&& gExplicitLanguageSetting != NOT_USED)) {
-		set_single_commit(IseDefaultValue[gIseLayout].SingleCommit);
-		change_inputmode(IseDefaultValue[gIseLayout].InputMode);
-	}
-
-	gCore->show();
-	gCore->disable_input_events(FALSE);
-
-	ise_update_cursor_position(g_cursor_position);
-	_set_backspace_private_key();
-
-	for (int loop = 0; loop < MAX_KEY; loop++) {
-		if (gDisableKeyBuffer[loop] != NOT_USED) {
-			gCore->disable_button(gCore->find_keyidx_by_customid(-1, -1, gDisableKeyBuffer[loop]));
-		}
-	}
-
-	static int prevDispModeBackup;
-	prevDispModeBackup = prevDispMode;
-	if (prevInputMode != gCore->get_input_mode()
-		|| prevDispMode != gCore->get_display_mode() || gFPrivateKeySet
-		|| prevPrivkeySet || bShouldUpdate) {
-			prevInputMode = gCore->get_input_mode();
-			prevDispMode = gCore->get_display_mode();
-			gCore->set_update_pending(FALSE);
-	} else {
-			gCore->set_update_pending(FALSE, FALSE);
-	}
-
-	/* Postpone window showing until first frame has been fully flushed */
-	if (!bRotated) {
-		gCore->get_window_size(&width, &height);
-
-		if (gFEffectEnabled) {
-			if (gFHiddenState || prevDispModeBackup != gCore->get_display_mode()) {
-				decorator.start_show_animation(width, height, gIseScreenDegree);
-			} else {
-				decorator.finish_show_animation(width, height, gIseScreenDegree);
-			}
-		} else {
-			int posx, posy;
-
-			CWindowSlideAnimator::get_window_pos_by_rotation(width,
-														height,
-														gIseScreenDegree,
-														&posx,
-														&posy,
-														NULL,
-														NULL);
-			evas_object_move(main_window, posx, posy);
-
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_STATE_EVENT,
-											ECORE_IMF_INPUT_PANEL_STATE_SHOW);
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-			_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_ON);
-#endif
-		}
-
-		evas_object_show(main_window);
-	} else {
-		Evas *evas = evas_object_evas_get(main_window);
-		evas_event_callback_add(evas, EVAS_CALLBACK_RENDER_FLUSH_POST,
-							render_flush_post_cb, NULL);
-	}
-
-	evas_object_show(main_window);
-
-	gFLayoutChanged = FALSE;
-	gPrevInputContext = ic;
-	gFInputContextSet = TRUE;
-	gFHiddenState = FALSE;
-	gIseScreenDegreeBackup = gIseScreenDegree;
-
-	gPrevModifier = KEY_MODIFIER_NONE;
-
-	prevPrivkeySet = gFPrivateKeySet;
+static void set_caps_mode(sclint mode) {
+    if (gSCLUI->get_shift_state() != SCL_SHIFT_STATE_LOCK) {
+        gSCLUI->set_shift_state(mode ? SCL_SHIFT_STATE_ON : SCL_SHIFT_STATE_OFF);
+    }
 }
 
 /**
-* Saves screen direction
-*/
-void ise_set_screen_direction(int degree)
+ * @brief Delete commit timer.
+ *
+ * @return void
+ */
+static void delete_commit_timer (void)
 {
-	if (degree == 0 || degree == 90 || degree == 180 || degree == 270) {
-		if (gIseScreenDegree == degree)
-			return;
-		if (gCore == NULL)
-			ise_new();
-		mcf_assert_return(gCore);
-		gIseScreenDegree = degree;
-		gFDisplaySetting = TRUE;
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-		g_virt_keybd_state = KEYPAD_STATE_UNKNOWN;
-#endif
-	}
+    if (_commit_timer != NULL) {
+        ecore_timer_del (_commit_timer);
+        _commit_timer = NULL;
+    }
 }
 
 /**
-* Sets screen rotation
-*/
-static void ise_set_screen_rotation(int degree)
+ * @brief Callback function for commit timer.
+ *
+ * @param data Data to pass when it is called.
+ *
+ * @return ECORE_CALLBACK_CANCEL
+ */
+static Eina_Bool commit_timeout (void *data)
 {
-	mcfint width = -1;
-	mcfint height = -1;
-
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-
-	gCore->set_display_mode(degree);
-	gCore->get_window_size(&width, &height);
-	evas_object_resize(main_window, width, height);
+    if (_commit_timer != NULL) {
+        g_ise_common->hide_preedit_string (-1, "");
+        ise_forward_key_event (_sig_dec_event[(_click_count-1)%SIG_DEC_SIZE]);
+        _click_count = 0;
+    }
+    _commit_timer = NULL;
+    return ECORE_CALLBACK_CANCEL;
 }
 
-void ise_hide(bool fCallHided)
+static sclboolean
+on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_type)
 {
-	CMCFWindows *windows = CMCFWindows::get_instance();
-	if(windows) {
-		windows->destroy_context_popup();
-	}
-	if (gCore) {
-		gCore->hide();
-		gCore->disable_input_events(TRUE);
-	}
+    sclboolean ret = FALSE;
 
-	helper_agent.candidate_hide();
-	send_flush();
+    if (gSCLUI) {
+        if (key_value) {
+            if (strcmp(key_value, "CUR_LANG") == 0) {
+                ret = _language_manager.select_current_language();
+            }
+            if (strcmp(key_value, "NEXT_LANG") == 0) {
+                ret = _language_manager.select_next_language();
+            }
+        }
+        const sclchar * cur_lang = _language_manager.get_current_language();
+        if (cur_lang) {
+            LANGUAGE_INFO *info = _language_manager.get_language_info(cur_lang);
+            if (info) {
+                if (info->accepts_caps_mode) {
+                    ise_send_event(MVK_Shift_Enable, scim::SCIM_KEY_NullMask);
+                    set_caps_mode(g_keyboard_state.caps_mode);
+                } else {
+                    ise_send_event(MVK_Shift_Disable, scim::SCIM_KEY_NullMask);
+                    gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                }
+            }
+        }
+    }
 
-	mcfint width = -1;
-	mcfint height = -1;
-
-	gCore->get_window_size(&width, &height);
-	if (gFEffectEnabled) {
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_STATE_EVENT,
-										ECORE_IMF_INPUT_PANEL_STATE_HIDE);
-		DBG("-=-=-= update_input_context :\
-			ECORE_IMF_INPUT_PANEL_STATE_HIDE\n");
-		decorator.start_hide_animation(width, height, gIseScreenDegreeBackup);
-	} else {
-		if (main_window)
-			evas_object_move(main_window, -10000, -10000);
-
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_STATE_EVENT,
-										ECORE_IMF_INPUT_PANEL_STATE_HIDE);
-	}
-
-	if (email_app_check)
-		email_app_check = FALSE;
-
-	gFHiddenState = TRUE;
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-	_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_OFF);
-#endif
+    return ret;
 }
 
-/**
-* Set  mode
-**/
-void ise_set_mode()
+
+SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info)
 {
-	mode_syncronize();
+    SCLEventReturnType ret = SCL_EVENT_PASS_ON;
+
+    if (noti_type == SCL_UINOTITYPE_SHIFT_STATE_CHANGE) {
+        if (g_need_send_shift_event) {
+            const sclchar * cur_lang = _language_manager.get_current_language();
+            if (cur_lang) {
+                LANGUAGE_INFO *info = _language_manager.get_language_info(cur_lang);
+                SclNotiShiftStateChangeDesc *desc = static_cast<SclNotiShiftStateChangeDesc*>(etc_info);
+                if (info && desc) {
+                    if (info->accepts_caps_mode) {
+                        if (desc->shift_state == SCL_SHIFT_STATE_OFF) {
+                            ise_send_event(MVK_Shift_Off, scim::SCIM_KEY_NullMask);
+                        }
+                        else if (desc->shift_state == SCL_SHIFT_STATE_ON) {
+                            ise_send_event(MVK_Shift_On, scim::SCIM_KEY_NullMask);
+                        }
+                        else if (desc->shift_state == SCL_SHIFT_STATE_LOCK) {
+                            ise_send_event(MVK_Shift_Lock, scim::SCIM_KEY_NullMask);
+                        }
+                        ret = SCL_EVENT_PASS_ON;
+                    }
+                }
+            }
+            g_need_send_shift_event = FALSE;
+        }
+    }
+
+    return ret;
 }
 
-void ise_set_language(unsigned int language)
+SCLEventReturnType CUIEventCallback::on_event_drag_state_changed(SclUIEventDesc event_desc)
 {
-	mcfint prevWinWidth, prevWinHeight;
-	gCore->get_window_size(&prevWinWidth, &prevWinHeight);
-
-	if (mcf_check_arrindex(language, MAX_LANG_NUM)) {
-		change_ldb_option(internalLangToLang[language]);
-		change_shiftmode(SHIFTMODE_OFF);
-		mcf8 mode = IseLangData[get_Ise_default_context().KeypadMode][language].inputMode;
-		gCore->set_input_mode(mode);
-
-		if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
-			gInitialInputMode = gCore->get_input_mode();
-		}
-
-		/* Save current language setting so that this
-		 * language will be displayed next time ISE_SHOW is called */
-		gExplicitLanguageSetting = language;
-
-		g_currentLanguage = language;
-		_setup_info.current_language = g_currentLanguage;
-
-		write_config();
-
-		IseLangDataSelectState[g_currentLanguage] = true;
-		_set_prediction_private_key();
-	}
-
-	mcfint winWidth, winHeight;
-	gCore->get_window_size(&winWidth, &winHeight);
-
-	if (prevWinWidth != winWidth || prevWinHeight != winHeight) {
-		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_GEOMETRY_EVENT, 0);
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-		_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_ON);
-#endif
-
-	}
-
-	for (int loop = 0; loop < MAX_KEY; loop++) {
-		if (gDisableKeyBuffer[loop] != NOT_USED) {
-			gCore->disable_button(gCore->find_keyidx_by_customid(-1, -1, gDisableKeyBuffer[loop]));
-		}
-	}
-	helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_LANGUAGE_EVENT, 0);
+    return SCL_EVENT_PASS_ON;
 }
 
-static void _dismissed_cb(void *data, Evas_Object *obj, void *event_info)
+SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_desc)
 {
-	evas_object_del(obj);
-	CMCFWindows *windows = CMCFWindows::get_instance();
-	windows->destroy_context_popup();
-	obj = NULL;
+    SCLEventReturnType ret = SCL_EVENT_PASS_ON;
+
+    if (gSCLUI) {
+        switch (event_desc.key_type) {
+        case KEY_TYPE_STRING:
+            if (event_desc.key_modifier != KEY_MODIFIER_MULTITAP_START &&
+                event_desc.key_modifier != KEY_MODIFIER_MULTITAP_REPEAT) {
+                    if (event_desc.key_event) {
+                        ise_forward_key_event(event_desc.key_event);
+                    } else {
+                        ise_send_string(event_desc.key_value);
+                    }
+            }
+            break;
+        case KEY_TYPE_CHAR: {
+                sclboolean need_forward = FALSE;
+                // FIXME : Should decide when to forward key events
+                const sclchar *input_mode = gSCLUI->get_input_mode();
+                if (input_mode) {
+                    if (strcmp(input_mode, "SYM_QTY_1") == 0 ||
+                            strcmp(input_mode, "SYM_QTY_2") == 0 ||
+                            strcmp(input_mode, "PHONE_3X4") == 0 ||
+                            strcmp(input_mode, "IPv6_3X4_123") == 0 ||
+                            strcmp(input_mode, "IPv6_3X4_ABC") == 0 ||
+                            strcmp(input_mode, "NUMONLY_3X4") == 0 ||
+                            strcmp(input_mode, "NUMONLY_3X4_SIG") == 0 ||
+                            strcmp(input_mode, "NUMONLY_3X4_DEC") == 0 ||
+                            strcmp(input_mode, "NUMONLY_3X4_SIGDEC") == 0 ||
+                            strcmp(input_mode, "DATETIME_3X4") == 0) {
+                        need_forward = TRUE;
+                    }
+                }
+                if (input_mode && strcmp (input_mode, "NUMONLY_3X4_SIGDEC") == 0 &&
+                    strcmp (event_desc.key_value, ".") == 0) {
+                    g_ise_common->update_preedit_string (-1, "", _sig_dec[_click_count%SIG_DEC_SIZE]);
+                    g_ise_common->show_preedit_string (-1, "");
+                    delete_commit_timer ();
+                    _commit_timer = ecore_timer_add (1.0, commit_timeout, NULL);
+                    _click_count++;
+                } else if (event_desc.key_event) {
+                    commit_timeout (NULL);
+                    if (need_forward) {
+                        ise_forward_key_event(event_desc.key_event);
+                    } else {
+                        ise_send_event(event_desc.key_event, scim::SCIM_KEY_NullMask);
+                    }
+                }
+                break;
+            }
+        case KEY_TYPE_CONTROL: {
+                commit_timeout (NULL);
+                if (event_desc.key_event) {
+                    ise_send_event(event_desc.key_event, scim::SCIM_KEY_NullMask);
+                    if (event_desc.key_event == MVK_Shift_L) {
+                        g_need_send_shift_event = TRUE;
+                    }
+                }
+                break;
+           }
+        case KEY_TYPE_MODECHANGE:
+            if (on_input_mode_changed(event_desc.key_value, event_desc.key_event, event_desc.key_type)) {
+                ret = SCL_EVENT_DONE;
+            }
+            break;
+        case KEY_TYPE_USER:
+            if (strcmp(event_desc.key_value, USER_KEYSTRING_OPTION) == 0) {
+                open_option_window(NULL, ROTATION_TO_DEGREE(gSCLUI->get_rotation()));
+                ret = SCL_EVENT_DONE;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return ret;
 }
 
-static void _ctxpopup_cb(void *data, Evas_Object *obj, void *event_info)
+void
+ise_set_layout(sclu32 layout, sclu32 layout_variation)
 {
-	int curLang = (int)data;
-	evas_object_del(obj);
-	CMCFWindows *windows = CMCFWindows::get_instance();
-	windows->destroy_context_popup();
-	obj = NULL;
-	ise_set_language(curLang);
+    /* Check if the layoutIdx is in the valid range */
+    if (layout < ISE_LAYOUT_STYLE_MAX) {
+        if (g_keyboard_state.layout != layout ||
+            g_keyboard_state.layout_variation != layout_variation) {
+            g_keyboard_state.need_reset = TRUE;
+        }
+        g_keyboard_state.layout = layout;
+        g_keyboard_state.layout_variation = layout_variation;
+        LOGD ("layout:%d, variation:%d", g_keyboard_state.layout, g_keyboard_state.layout_variation);
+    }
 }
 
-void _show_language_popup(mcfshort x, mcfshort y) {
-	CMCFWindows *windows = CMCFWindows::get_instance();
-	Evas_Object* win = windows->get_context_popup();
-	ctxspopup = elm_ctxpopup_add(win);
-	elm_object_scroll_freeze_push(ctxspopup);
-	evas_object_smart_callback_add(ctxspopup,"dismissed", _dismissed_cb, (void*)win);
-	for (unsigned int loop = 0; loop < MAX_LANG_NUM; loop++) {
-		if (IseLangData[KEYPAD_QWERTY][loop].name) {
-			scim::String str = scim::scim_get_language_name_english(IseLangData[KEYPAD_QWERTY][loop].name);
-			strncpy(IseLangData[KEYPAD_QWERTY][loop].displayname, dgettext(GETTEXT_PACKAGE, language_text_name[loop]), 255);
-		}
-	}
-	for (unsigned int loop = 0; loop < MAX_LANG_NUM; loop++) {
-		if (IseLangDataSelectState[loop]) {
-			elm_ctxpopup_item_append(ctxspopup,IseLangData[1][loop].displayname, NULL, _ctxpopup_cb, (void*)loop);
-		}
-	}
-	evas_object_size_hint_max_set(ctxspopup, 800, 230);
-	evas_object_move(ctxspopup,x,y);
-	evas_object_show(win);
-	evas_object_show(ctxspopup);
+void
+ise_reset_context()
+{
 }
 
-void ise_set_lang_to_vconf(unsigned int language)
+void
+ise_reset_input_context()
 {
-	if (mcf_check_arrindex(language, MAX_LANG_NUM)) {
-		change_ldb_option(internalLangToLang[language]);
-		g_currentLanguage = language;
-		IseLangDataSelectState[g_currentLanguage] = true;
-
-	}
 }
 
-void ise_focus_in()
+void
+ise_focus_in(int ic)
 {
-	if (gCore == NULL)
-		ise_new();
-
-	mcf_assert_return(gCore);
-}
-
-void ise_new()
-{
-	if (gCore == NULL) {
-		if (main_window) {
-			gCore = new CMCFCore((void *)main_window);
-			gCore->set_event_callback(&callback);
-			float timeout = elm_config_longpress_timeout_get();
-
-			/* convert timeout second value to milisecond value;*/
-			timeout *= 1000;
-			gCore->set_longkey_duration(timeout);
-		}
-	}
-}
-
-/**
-* It will call when the current ISE lose focus
-*/
-void ise_focus_out()
-{
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-	if (main_window != NULL) {
-	          send_flush();
-	}
-	//memset(gPrivateKeyBuffer, 0x00, sizeof(gPrivateKeyBuffer));
-
-	if (gPrevMultitapValue) {
-		gPrevMultitapValue = NULL;
-	}
-}
-
-void ise_set_caps_mode(unsigned int mode)
-{
-	mcf8 inputmode = gCore->get_input_mode();
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-
-	if (mode) {
-		gExternalShiftLockMode = TRUE;
-	} else {
-		gExternalShiftLockMode = FALSE;
-	}
-
-	if (inputmode == INPUT_MODE_QTY_ENGLISH ||
-		inputmode >= INPUT_MODE_QTY_FRENCH && inputmode <= INPUT_MODE_QTY_RUSSIAN ||
-		inputmode == INPUT_MODE_QTY_URL ||
-		inputmode == INPUT_MODE_QTY_EMAIL) {
-			if(get_Ise_default_context().ShiftMode != SHIFTMODE_LOCK) {
-				change_shiftmode(mode ? SHIFTMODE_ON : SHIFTMODE_OFF);
-				gCore->set_shift_state(mode ? MCF_SHIFT_STATE_ON : MCF_SHIFT_STATE_OFF);
-				helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-						mode ? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
-			}
-	}
-}
-
-void ise_explicitly_set_language(unsigned int language)
-{
-	if (language == ECORE_IMF_INPUT_PANEL_LANG_ALPHABET) {
-		/* Force to show PRIMARY_LANGUAGE_INDEX mode*/
-		gExplicitLanguageSetting = PRIMARY_LANGUAGE_INDEX;
-	}
-}
-
-void ise_get_language_locale(char **locale)
-{
-    if(locale) {
-        for(int index = 0;index < (sizeof(lang_table) / sizeof(ISELanguageTable));index++) {
-            if(lang_table[index].language_code == g_currentLanguage) {
-                *locale = strdup(lang_table[index].language_string);
+    LOGD("ic : %x , %x , g_ic : %x , %x, g_focused_ic : %x , %x", ic, check_ic_temporary(ic),
+            g_keyboard_state.ic, check_ic_temporary(g_keyboard_state.ic),
+            g_keyboard_state.focused_ic, check_ic_temporary(g_keyboard_state.focused_ic));
+    if (check_ic_temporary(g_keyboard_state.ic) && !check_ic_temporary(ic)) {
+        g_keyboard_state.ic = ic;
+    }
+    g_keyboard_state.focused_ic = ic;
+    if (ic == g_keyboard_state.ic) {
+        if (g_ise_common) {
+            if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_PHONENUMBER ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_IP ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_MONTH ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY) {
+                g_ise_common->set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
+            } else {
+                g_ise_common->set_keyboard_ise_by_uuid(g_ise_common->get_keyboard_ise_uuid().c_str());
             }
         }
     }
 }
-unsigned int ise_get_language()
-{
-	mcf8 language = 0;
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return_false(gCore);
 
-	return language;
+void
+ise_focus_out(int ic)
+{
+    g_keyboard_state.focused_ic = 0;
+}
+
+void
+ise_attach_input_context(int ic)
+{
+    LOGD("attaching, ic : %x , %x , g_ic : %x , %x, g_focused_ic : %x , %x", ic, check_ic_temporary(ic),
+            g_keyboard_state.ic, check_ic_temporary(g_keyboard_state.ic),
+            g_keyboard_state.focused_ic, check_ic_temporary(g_keyboard_state.focused_ic));
+    ise_focus_in(ic);
+}
+
+void
+ise_detach_input_context(int ic)
+{
+    ise_focus_out(ic);
+}
+
+void
+ise_show(int ic)
+{
+    sclboolean reset_inputmode = FALSE;
+    if (gSCLUI && g_ise_common) {
+
+        read_ise_config_values();
+
+        _language_manager.set_enabled_languages(g_config_values.enabled_languages);
+
+    LOGD("ic : %x , %x , g_ic : %x , %x, g_focused_ic : %x , %x", ic, check_ic_temporary(ic),
+            g_keyboard_state.ic, check_ic_temporary(g_keyboard_state.ic),
+            g_keyboard_state.focused_ic, check_ic_temporary(g_keyboard_state.focused_ic));
+        if (check_ic_temporary(ic) && !check_ic_temporary(g_keyboard_state.focused_ic)) {
+            ic = g_keyboard_state.focused_ic;
+        }
+        if (!check_ic_temporary(ic) && check_ic_temporary(g_keyboard_state.focused_ic)) {
+            g_keyboard_state.focused_ic = ic;
+        }
+        if (ic == g_keyboard_state.focused_ic) {
+            if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_PHONENUMBER ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_IP ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_MONTH ||
+                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY) {
+                g_ise_common->set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
+            }
+        }
+
+        /* Reset input mode if the input context value has changed */
+        if (ic != g_keyboard_state.ic) {
+            reset_inputmode = TRUE;
+        }
+        g_keyboard_state.ic = ic;
+        /* Reset input mode if the current language is not the selected language */
+        const sclchar * cur_lang = _language_manager.get_current_language();
+        if (cur_lang) {
+            if (g_config_values.selected_language.compare(cur_lang) != 0) {
+                reset_inputmode = TRUE;
+            }
+        }
+        /* No matter what, just reset the inputmode if it needs to */
+        if (g_keyboard_state.need_reset) {
+            reset_inputmode = TRUE;
+        }
+        g_keyboard_state.need_reset = FALSE;
+
+        /* If the current layout requires latin language and current our language is not latin, enable the primary latin */
+        sclboolean force_primary_latin = FALSE;
+        LANGUAGE_INFO *info = _language_manager.get_language_info(g_config_values.selected_language.c_str());
+        if (info) {
+            if (g_ise_default_values[g_keyboard_state.layout].force_latin && !(info->is_latin_language)) {
+                force_primary_latin = TRUE;
+            }
+        }
+        if (force_primary_latin) {
+            _language_manager.set_language_enabled_temporarily(PRIMARY_LATIN_LANGUAGE, TRUE);
+        }
+
+        if (reset_inputmode) {
+            ise_reset_context();
+
+            /* Turn the shift state off if we need to reset our input mode, only when auto-capitalization is not set  */
+            if (!(g_keyboard_state.caps_mode)) {
+                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+            }
+            if (g_keyboard_state.layout < ISE_LAYOUT_STYLE_MAX) {
+                sclu32 layout_index = g_keyboard_state.layout;
+                if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY &&
+                    g_keyboard_state.layout_variation > 0 &&
+                    g_keyboard_state.layout_variation < ISE_LAYOUT_NUMBERONLY_VARIATION_MAX) {
+                    layout_index = ISE_LAYOUT_STYLE_NUMBERONLY_SIG + g_keyboard_state.layout_variation - 1;
+                }
+
+                /* If this layout requires specific input mode, set it */
+                if (strlen(g_ise_default_values[layout_index].input_mode) > 0) {
+                    gSCLUI->set_input_mode(g_ise_default_values[layout_index].input_mode);
+
+                    SclSize size_portrait = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_PORTRAIT);
+                    SclSize size_landscape = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_LANDSCAPE);
+                    g_ise_common->set_keyboard_size_hints(size_portrait, size_landscape);
+                } else {
+                    if (force_primary_latin) {
+                        _language_manager.select_language(PRIMARY_LATIN_LANGUAGE, TRUE);
+                    } else {
+                        if (!(_language_manager.select_language(g_config_values.selected_language.c_str()))) {
+                            _language_manager.select_language(PRIMARY_LATIN_LANGUAGE);
+                        }
+                    }
+                }
+                gSCLUI->set_cur_sublayout(g_ise_default_values[g_keyboard_state.layout].sublayout_name);
+            }
+        }
+
+        if (info) {
+            if (info->accepts_caps_mode) {
+                // FIXME this if condition means the AC is off
+                if (g_keyboard_state.layout != ISE_LAYOUT_STYLE_NORMAL) {
+                    gSCLUI->set_autocapital_shift_state(TRUE);
+                    gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                }
+                // normal layout means the AC is on
+                else {
+                    ise_send_event(MVK_Shift_Enable, scim::SCIM_KEY_NullMask);
+                    gSCLUI->set_autocapital_shift_state(FALSE);
+                }
+            } else {
+                gSCLUI->set_autocapital_shift_state(TRUE);
+                ise_send_event(MVK_Shift_Disable, scim::SCIM_KEY_NullMask);
+                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+            }
+        } else {
+            gSCLUI->set_autocapital_shift_state(TRUE);
+        }
+
+        gSCLUI->show();
+        gSCLUI->disable_input_events(FALSE);
+    }
+
+    g_candidate->show();
+    g_keyboard_state.visible_state = TRUE;
 }
 
 /**
-* Sets the current context to default context
-*/
-void ise_reset_context()
+ * Sets screen rotation
+ */
+void
+ise_set_screen_rotation(int degree)
 {
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-	send_flush();
-
-	int loop;
-	for (loop = 0; loop < ISE_PRIVATE_KEY_BUFFER_SIZE; loop++) {
-		if (gPrivateKeyBuffer[loop].used) {
-			gCore->unset_private_key(gPrivateKeyBuffer[loop].privateId);
-		}
-	}
-
-	gCore->set_update_pending(TRUE);
-	memset(gPrivateKeyBuffer, 0x00, sizeof(gPrivateKeyBuffer));
-	gIseLayout = ISE_LAYOUT_STYLE_NORMAL;
-	ise_set_layout(gIseLayout);
-	ise_set_screen_direction(0);
-
-	for (loop = 0; loop < MAX_KEY; loop++) {
-		gDisableKeyBuffer[loop] = NOT_USED;
-	}
-
-	gExternalShiftLockMode = FALSE;
-	gFPrivateKeySet = FALSE;
-	gCore->set_update_pending(FALSE, FALSE);
+    if (gSCLUI) {
+        gSCLUI->set_rotation(DEGREE_TO_SCLROTATION(degree));
+    }
+    if (g_candidate) {
+        g_candidate->rotate(degree);
+    }
 }
 
-void ise_reset_input_context()
+void
+ise_set_accessibility_state(bool state)
 {
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-	send_flush();
-
-	if (gCore) {
-		gCore->close_all_popups();
-	}
+    if (gSCLUI) {
+        gSCLUI->enable_tts(state);
+    }
 }
 
-void ise_set_private_key(int keyIdx, char *label, char *imgPath, int valueIdx, char *valueStr)
+void
+ise_hide()
 {
-	if (gCore == NULL)
-		ise_new();
-
-	mcf_assert_return(gCore);
-
-	mcf_assert_return(valueStr);
-
-	mcf8 pkIndex = -1;
-	mcfint loop;
-
-	for (loop = 0; loop < ISE_PRIVATE_KEY_BUFFER_SIZE; loop++) {
-		/* Overwrite the buffer if the given key is already in the buffer list */
-		if (gPrivateKeyBuffer[loop].keyIdx == keyIdx) {
-			pkIndex = loop;
-		}
-		if(pkIndex == -1 && !gPrivateKeyBuffer[loop].used) {
-			pkIndex = loop;
-		}
-	}
-
-	if(pkIndex != -1) {
-		gPrivateKeyBuffer[pkIndex].used = TRUE;
-		gPrivateKeyBuffer[pkIndex].keyIdx = keyIdx;
-
-		if (label) {
-			strncpy(gPrivateKeyBuffer[pkIndex].label, label, ISE_PRIVATE_KEY_LABEL_LEN - 1);
-			gPrivateKeyBuffer[pkIndex].label[ISE_PRIVATE_KEY_LABEL_LEN - 1] = '\0';
-		} else {
-			strcpy(gPrivateKeyBuffer[pkIndex].label, "");
-		}
-
-		if (valueStr) {
-			strncpy(gPrivateKeyBuffer[pkIndex].valueStr, valueStr, ISE_PRIVATE_KEY_VALUE_LEN - 1);
-			gPrivateKeyBuffer[pkIndex].valueStr[ISE_PRIVATE_KEY_VALUE_LEN- 1] = '\0';
-		} else {
-			strcpy(gPrivateKeyBuffer[pkIndex].valueStr, "");
-		}
-
-		if (imgPath) {
-			strncpy(gPrivateKeyBuffer[pkIndex].ImgPath, imgPath, ISE_PRIVATE_KEY_IMAGE_LEN - 1);
-			gPrivateKeyBuffer[pkIndex].ImgPath[ISE_PRIVATE_KEY_IMAGE_LEN - 1] = '\0';
-		} else {
-			strcpy(gPrivateKeyBuffer[pkIndex].ImgPath,"");
-		}
-
-		for(loop = 0; loop < MCF_BUTTON_STATE_MAX; loop++) {
-			gPrivateKeyBuffer[pkIndex].imgPathArr[loop] = gPrivateKeyBuffer[pkIndex].ImgPath;
-		}
-
-		gCore->set_private_key(-1, -1, gCore->find_keyidx_by_customid(-1, -1, keyIdx),
-			gPrivateKeyBuffer[pkIndex].label, gPrivateKeyBuffer[pkIndex].imgPathArr, NULL,
-			valueIdx, gPrivateKeyBuffer[pkIndex].valueStr, TRUE);
-
-		gFPrivateKeySet = TRUE;
-	}
+    _click_count = 0;
+    delete_commit_timer ();
+    if (gSCLUI && g_ise_common) {
+        gSCLUI->disable_input_events(TRUE);
+        gSCLUI->hide();
+    }
+    g_keyboard_state.visible_state = FALSE;
+    if (g_candidate) {
+        g_candidate->hide();
+    }
 }
 
-#ifdef SLP_PROF
-inline static double cur_time_get(void)
+void
+ise_create()
 {
-	struct timeval timev;
+    if (!gSCLUI) {
+        gSCLUI = new CSCLUI;
+    }
 
-	gettimeofday(&timev, NULL);
-	return (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
+    /* Set scl_parser_type
+     * default type is text xml
+     * use command: export sclres_type="sclres_binary" to enable use binary resource
+     * please make sure there is sclresource.bin in resource folder
+     * Or you can use `xml2binary $resource_dir` to generate the sclresource.bin
+     * xml2binary is in the libscl-ui-devel package
+     */
+    SCLParserType scl_parser_type = SCL_PARSER_TYPE_XML;
+    char* sclres_type = getenv("sclres_type");
+    if (sclres_type != NULL && 0 == strcmp("sclres_binary", sclres_type)) {
+        scl_parser_type = SCL_PARSER_TYPE_BINARY_XML;
+    } else {
+        scl_parser_type = SCL_PARSER_TYPE_XML;
+    }
+
+
+    if (gSCLUI && g_ise_common) {
+        if (g_ise_common->get_main_window()) {
+            sclboolean succeeded = FALSE;
+
+            const sclchar *resource_file_path = _language_manager.get_resource_file_path();
+
+            if (resource_file_path) {
+                if (strlen(resource_file_path) > 0) {
+                    succeeded = gSCLUI->init((sclwindow)g_ise_common->get_main_window(), scl_parser_type, resource_file_path);
+                }
+            }
+            if (!succeeded) {
+                gSCLUI->init((sclwindow)g_ise_common->get_main_window(), scl_parser_type, MAIN_ENTRY_XML_PATH);
+            }
+            // FIXME whether to use global var, need to check
+            if (g_candidate == NULL) {
+                g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_ise_common->get_main_window());
+            }
+            g_candidate->add_event_listener(&g_candidate_event_listener);
+            gSCLUI->set_longkey_duration(elm_config_longpress_timeout_get() * 1000);
+
+            /* Default ISE callback */
+            gSCLUI->set_ui_event_callback(&callback);
+
+            /* Accumulated customized ISE callbacks, depending on the input modes */
+            for (scluint loop = 0;loop < _language_manager.get_languages_num();loop++) {
+                LANGUAGE_INFO *language = _language_manager.get_language_info(loop);
+                if (language) {
+                    for (scluint inner_loop = 0;inner_loop < language->input_modes.size();inner_loop++) {
+                        INPUT_MODE_INFO &info = language->input_modes.at(inner_loop);
+                        LOGD("Registering callback for input mode %s : %p\n", info.name.c_str(), language->callback);
+                        gSCLUI->set_ui_event_callback(language->callback, info.name.c_str());
+                    }
+                }
+            }
+
+            read_ise_config_values();
+            _language_manager.set_enabled_languages(g_config_values.enabled_languages);
+
+            _language_manager.select_language(g_config_values.selected_language.c_str());
+        }
+
+        SclSize size_portrait = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_PORTRAIT);
+        SclSize size_landscape = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_LANDSCAPE);
+        g_ise_common->set_keyboard_size_hints(size_portrait, size_landscape);
+    }
 }
-#endif
 
-void ise_set_disable_key(int keyIdx, int disabled)
+void
+ise_destroy()
 {
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
-	/* Key index */
-	int actualKeyIdx = gCore->find_keyidx_by_customid(-1, -1, keyIdx);
-	if (disabled) {
-		gCore->disable_button(actualKeyIdx);
-	} else {
-		gCore->enable_button(actualKeyIdx);
-	}
-
-	if (disabled) {
-		int iIndex = NOT_USED;
-		for (int loop = 0; loop < MAX_KEY; loop++) {
-			if (gDisableKeyBuffer[loop] == keyIdx)
-				return;
-			if (gDisableKeyBuffer[loop] == NOT_USED) {
-				iIndex = loop;
-			}
-		}
-
-		if (iIndex != NOT_USED) {
-			gDisableKeyBuffer[iIndex] = keyIdx;
-		}
-	} else {
-		for (int loop = 0; loop < MAX_KEY; loop++) {
-			if (gDisableKeyBuffer[loop] == keyIdx) {
-				gDisableKeyBuffer[loop] = NOT_USED;
-			}
-		}
-	}
-
-	gFPrivateKeySet = TRUE;
+    if (gSCLUI) {
+        LOGD("calling gSCLUI->fini()");
+        gSCLUI->fini();
+        LOGD("deleting gSCLUI");
+        delete gSCLUI;
+        gSCLUI = NULL;
+    }
+    if (g_candidate) {
+        delete g_candidate;
+        g_candidate = NULL;
+    }
 }
 
-void ise_update_cursor_position(int position)
+// when it is the time to auto_cap, the
+// ise_set_caps_mode is called.
+// -------------------------------------------------------
+// For example: [How are you. Fine.], the
+// auto-capital process is as below:
+// Note: "["<--this is the beginning,
+// "|"<--this is the cursor position
+// 1) call ise_set_caps_mode, auto_cap = on
+//    input: "H",
+//    result: [H|
+// 2) call ise_set_caps_mode, auto_cap = off
+//    input: "o"
+//    result: [Ho|
+// 3) input: "w are you. "
+//    result: [How are you. |
+// 4) call ise_set_caps_mode, auto_cap = on
+//    input: "F"
+//    result: [How are you. F
+// 5) input: "ine."
+//    result: [How are you. Fine.|
+// --------------------------------------------------------
+// If we want to change the auto_cap, eg,
+// if we want to input [How Are you.]
+// Note the "Are" is not use auto-capital rule.
+// we should use:
+//    ise_send_event(MVK_Shift_On, scim::SCIM_KEY_NullMask);
+// when we are want to input "A"
+// following input still has the auto_cap rule.
+void
+ise_set_caps_mode(unsigned int mode)
 {
-	if (gCore == NULL)
-		ise_new();
-	mcf_assert_return(gCore);
+    if (mode) {
+        g_keyboard_state.caps_mode = TRUE;
+    } else {
+        g_keyboard_state.caps_mode = FALSE;
+    }
+    const sclchar * cur_lang = _language_manager.get_current_language();
+    if (cur_lang) {
+        LANGUAGE_INFO *info = _language_manager.get_language_info(cur_lang);
+        if (info) {
+            if (info->accepts_caps_mode) {
+                set_caps_mode(g_keyboard_state.caps_mode);
+            } else {
+                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+            }
+        }
+    }
+}
 
-	g_cursor_position = position;
-
-	if (gCore) {
-		if(position > 0) {
-			ise_set_private_key(CUSTOMID_WWWCOM, WWWCOM_BUTTON_COM_STR, NULL, 0, WWWCOM_BUTTON_COM_STR);
-		} else {
-			ise_set_private_key(CUSTOMID_WWWCOM, WWWCOM_BUTTON_WWW_STR, NULL, 0, WWWCOM_BUTTON_WWW_STR);
-		}
-	}
+void
+ise_update_cursor_position(int position)
+{
+    if (gSCLUI) {
+        if (position > 0) {
+            gSCLUI->set_string_substitution("www.", ".com");
+        } else {
+            gSCLUI->unset_string_substitution("www.");
+        }
+    }
 }
 
 void ise_set_return_key_type(unsigned int type)
 {
-	char buf[64];
+    const int BUF_LEN = 64;
+    char buf[BUF_LEN];
 
-	switch (type)
-	{
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DONE:
-			sprintf(buf, _("Done"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_GO:
-			sprintf(buf, _("Go"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_JOIN:
-			sprintf(buf, _("Join"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_LOGIN:
-			sprintf(buf, _("Login"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_NEXT:
-			sprintf(buf, _("Next"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SEARCH:
-			sprintf(buf, _("Search"));
-		break;
-		case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SEND:
-			sprintf(buf, _("Send"));
-		break;
-	}
+    switch (type)
+    {
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DONE:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_DONE);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_GO:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_GO);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_JOIN:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_JOIN);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_LOGIN:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_LOGIN);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_NEXT:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_NEXT);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SEARCH:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_SEARCH);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SEND:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_SEND);
+        break;
+    case ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_SIGNIN:
+        snprintf(buf, BUF_LEN, ISE_RETURN_KEY_LABEL_SIGNIN);
+        break;
+    default:
+        break;
+    }
 
-	if (type != ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DEFAULT)
-		ise_set_private_key(CUSTOMID_ENTER, buf, NULL, MVK_Return, NULL);
-	else
-		ise_set_private_key(CUSTOMID_ENTER, NULL, "B09_icon_enter.png", MVK_Return, NULL);
+    if (type == ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DEFAULT) {
+        gSCLUI->unset_private_key("Enter");
+    } else {
+        static sclchar *imagelabel[SCL_BUTTON_STATE_MAX] = {
+           const_cast<sclchar*>(" "), const_cast<sclchar*>(" "), const_cast<sclchar*>(" ")
+        };
+
+        gSCLUI->set_private_key("Enter", buf, imagelabel, NULL, 0, const_cast<sclchar*>("Enter"), TRUE);
+    }
 }
 
 void ise_set_return_key_disable(unsigned int disabled)
 {
-	ise_set_disable_key(CUSTOMID_ENTER, disabled);
+    gSCLUI->enable_button("Enter", !disabled);
 }
 
-/**
-* Update spot location
-*/
-void ise_update_spot_location(int x, int y)
+void ise_get_language_locale(char **locale)
 {
-
+    LANGUAGE_INFO *info = _language_manager.get_current_language_info();
+    if(info) {
+        if(!(info->locale_string.empty())) {
+            *locale = strdup(info->locale_string.c_str());
+        }
+    }
 }
 
-int init_i18n(const char *domain, const char *dir)
+void ise_update_table(const vector<string> &vec_str)
 {
-	if (setlocale(LC_ALL, "") == NULL)
-		return -1;
-
-	if (bindtextdomain(domain, dir) == NULL)
-		return -1;
-
-	if (textdomain(domain) == NULL)
-		return -1;
-
-	return 0;
-}
-
-/**
-* initialize the variables
-*/
-int init(const String & display)
-{
-	PERF_TEST_START("\tinit()");
-
-	char **argv = new char*[4];
-	int argc = 3;
-	int ret;
-
-	main_window = NULL;
-
-	argv[0] = (char *)ISE_NAME;
-	argv[1] = (char *)"--display";
-	argv[2] = const_cast<char *>(display.c_str());
-	argv[3] = 0;
-
-#ifdef SLP_PROF
-	start_time = cur_time_get();
-#endif
-
-	setenv("DISPLAY", display.c_str(), 1);
-
-	elm_init(argc, argv);
-	PERF_TEST_MID("\t\telm_init()");
-
-	ret = init_i18n(PACKAGE, LOCALEDIR);
-
-	create_main_window();
-
-	PERF_TEST_END("\tinit()");
-	return EXIT_SUCCESS;
-}
-
-int fini_cnt = 0;
-
-void fini()
-{
-	if (gCore)
-		delete(gCore);
-	gCore = NULL;
-
-	elm_shutdown();
-}
-
-void ise_get_size(int *x, int *y, int *width, int *height)
-{
-	if (x && y && width && height) {
-		*x = 0;
-		*y = 0;
-		*width = 0;
-		*height = 0;
-
-		mcfint win_w, win_h;
-		if (gCore) {
-			gCore->get_window_size(width, height);
-			gCore->get_screen_resolution(&win_w, &win_h);
-
-			if (gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) {
-				mcfint temp = win_w;
-				win_w = win_h;
-				win_h = temp;
-			}
-			*x = (win_w - *width) / 2;
-			if (gFHiddenState) {
-				*y = win_h;
-			} else {
-				*y = win_h - (*height);
-			}
-		}
-	}
+    if (g_candidate) {
+        g_candidate->update(vec_str);
+    }
 }

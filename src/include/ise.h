@@ -1,153 +1,143 @@
 /*
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright (c) 2012 - 2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.tizenopensource.org/license
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
+#ifndef _ISE_H_
+#define _ISE_H_
 
-#ifndef _DEFAULTISE_H_
-#define _DEFAULTISE_H_
-
+#include <scl.h>
 #include <Ecore.h>
 #include <Evas.h>
 #include <Ecore_Evas.h>
-#include "perf_test.h"
-#include "mcf.h"
-#include "ise-default-setting.h"
-#include "languagesetting.h"
 #include <Ecore_IMF.h>
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif  /*  */
+#include <vector>
+#include <string>
+#include "languages.h"
 
-/*#define DEBUG_MODE*/
+#define ISE_VERSION "1.0.8-1"
+#define LOCALEDIR "/usr/share/locale"
 
-/*#define PACKAGE					ISE_NAME*/
-#define LOCALEDIR					"/usr/share/locale"
+#define PRIMARY_LATIN_LANGUAGE "English"
+#define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry.xml"
 
-#define CONFIG_SETTING_FLAG		ISE_NAME "/setting_flag"
-#define CONFIG_LANGUAGE_LIST		ISE_NAME "/language_list"
-#define CONFIG_CURRENT_LANGUAGE	ISE_NAME "/current_language"
-#define CONFIG_LANGUAGE_COUNT		ISE_NAME "/lang_count"
+#define DEFAULT_KEYBOARD_ISE_UUID "d75857a5-4148-4745-89e2-1da7ddaf7999"
 
+//#define INPUT_MODE_NATIVE MAX_INPUT_MODE /* Native mode. It will distinguish to the current user language */
 
-#define INPUT_MODE_NATIVE	MAX_INPUT_MODE /* Native mode. It will distinguish to the current user language */
+//#define ISE_RELEASE_AUTOCOMMIT_BLOCK_INTERVAL 1300
 
-#define ISE_RELEASE_AUTOCOMMIT_BLOCK_INTERVAL	1300
-#define ISE_RELEASE_AUTOCOMMIT_BLOCK_INTERVAL_FOR_SHIFT	1
+#include <dlog.h>
+#undef LOG_TAG
+#define LOG_TAG "ISE_DEFAULT"
 
-#define WWWCOM_BUTTON_WWW_STR		"www."
-#define WWWCOM_BUTTON_COM_STR		".com"
+enum ISE_LAYOUT{
+    ISE_LAYOUT_STYLE_NORMAL = 0,
+    ISE_LAYOUT_STYLE_NUMBER,
+    ISE_LAYOUT_STYLE_EMAIL,
+    ISE_LAYOUT_STYLE_URL,
+    ISE_LAYOUT_STYLE_PHONENUMBER,
+    ISE_LAYOUT_STYLE_IP,
+    ISE_LAYOUT_STYLE_MONTH,
+    ISE_LAYOUT_STYLE_NUMBERONLY,
+    ISE_LAYOUT_STYLE_INVALID,
+    ISE_LAYOUT_STYLE_HEX,
+    ISE_LAYOUT_STYLE_TERMINAL,
+    ISE_LAYOUT_STYLE_PASSWORD,
+    ISE_LAYOUT_STYLE_DATETIME,
+    ISE_LAYOUT_STYLE_EMOTICON,
 
-#ifndef DBG
-#define DBG printf
-#endif
+    ISE_LAYOUT_STYLE_NUMBERONLY_SIG,
+    ISE_LAYOUT_STYLE_NUMBERONLY_DEC,
+    ISE_LAYOUT_STYLE_NUMBERONLY_SIGDEC,
 
-typedef enum _IseLayout {
-	ISE_LAYOUT_STYLE_NORMAL = 0,
-	ISE_LAYOUT_STYLE_NUMBER,
-	ISE_LAYOUT_STYLE_EMAIL,
-	ISE_LAYOUT_STYLE_URL,
-	ISE_LAYOUT_STYLE_PHONENUMBER,
-	ISE_LAYOUT_STYLE_IP,
-	ISE_LAYOUT_STYLE_MONTH,
-	ISE_LAYOUT_STYLE_NUMBERONLY,
-	MAX_ISE_LAYOUT_CNT
-}IseLayout;
-
-#ifdef HAVE_CONFORMANT_AUTOSCROLL
-typedef enum _Virtual_Keyboard_State
-{
-	KEYPAD_STATE_UNKNOWN = 0,
-	KEYPAD_STATE_OFF,
-	KEYPAD_STATE_ON,
-} Virtual_Keyboard_State;
-
-void _send_keypad_geom_atom_info(Evas_Object *window, Virtual_Keyboard_State kbd_state);
-#endif
-
-/**
-*@brief ISE Default value case by ISE layout
-*/
-typedef struct _ISEDefaultValueTable {
-	IseLayout iseLayout;
-	mcfu8 mcfInputMode;
-	mcf8 KeypadMode;
-	mcf8 InputMode;
-	mcf8 ShiftMode;
-	mcf8 OnOff;
-	mcf8 CompletionMode;
-	mcf8 SingleCommit;
-	mcfboolean resetOnModeChange;
-    mcfint subLayoutID;
-}ISEDefaultValueTable;
-
-#define ISE_PRIVATE_KEY_BUFFER_SIZE 16
-#define ISE_PRIVATE_KEY_LABEL_LEN 16
-#define ISE_PRIVATE_KEY_VALUE_LEN 16
-#define ISE_PRIVATE_KEY_IMAGE_LEN 256
-
-typedef struct _ISEPrivateKeyBuffer {
-	mcfboolean used;
-	mcfchar label[ISE_PRIVATE_KEY_LABEL_LEN];
-	mcfint valueIdx;
-	mcfchar valueStr[ISE_PRIVATE_KEY_VALUE_LEN];
-	mcfchar ImgPath[ISE_PRIVATE_KEY_IMAGE_LEN];
-	mcfchar *imgPathArr[MCF_BUTTON_STATE_MAX];
-	mcfint privateId;
-	mcfint layoutIdx;
-	mcfint keyIdx;
-}ISEPrivateKeyBuffer;
-
-
-typedef struct _ISELastInputContext {
-	mcfchar *keyValue;
-	mcfulong keyEvent;
-	MCFKeyType keyType;
-}ISELastInputContext;
+    ISE_LAYOUT_STYLE_MAX
+};
 
 typedef struct {
-    const char *language_string;
-    const int language_code;
-}ISELanguageTable;
+    const sclchar *input_mode;
+    const sclchar *sublayout_name;
+    const sclboolean force_latin;
+} ISE_DEFAULT_VALUES;
 
+const ISE_DEFAULT_VALUES g_ise_default_values[ISE_LAYOUT_STYLE_MAX] = {
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NORMAL */
+    {"SYM_QTY_1",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NUMBER */
+    {"",                "EMAIL",        TRUE },     /* ISE_LAYOUT_STYLE_EMAIL */
+    {"",                "URL",          TRUE },     /* ISE_LAYOUT_STYLE_URL */
+    {"PHONE_3X4",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_PHONENUMBER */
+    {"NUMONLY_3X4_DEC", "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_IP */
+    {"MONTH_3X4",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_MONTH */
+    {"NUMONLY_3X4",     "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_INVALID */
+    {"SYM_QTY_1",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_HEX */
+    {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_TERMINAL */
+    {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_PASSWORD */
+    {"DATETIME_3X4",    "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_DATETIME */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_EMOTICON */
+
+    {"NUMONLY_3X4_SIG",    "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_SIG */
+    {"NUMONLY_3X4_DEC",    "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_DEC */
+    {"NUMONLY_3X4_SIGDEC", "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_SIGDEC */
+};
+
+#define ISE_RETURN_KEY_LABEL_DONE   gettext("IDS_IME_SK_DONE_ABB")
+#define ISE_RETURN_KEY_LABEL_GO     gettext("IDS_IME_OPT_GO_ABB")
+#define ISE_RETURN_KEY_LABEL_JOIN   gettext("IDS_IME_OPT_JOIN_M_SIGN_IN")
+#define ISE_RETURN_KEY_LABEL_LOGIN  gettext("IDS_IME_OPT_LOG_IN_ABB")
+#define ISE_RETURN_KEY_LABEL_NEXT   dgettext("sys_string", "IDS_COM_SK_NEXT")
+#define ISE_RETURN_KEY_LABEL_SEARCH dgettext("sys_string", "IDS_COM_BODY_SEARCH")
+#define ISE_RETURN_KEY_LABEL_SEND   dgettext("sys_string", "IDS_COM_SK_SEND")
+#define ISE_RETURN_KEY_LABEL_SIGNIN dgettext("sys_string", "IDS_COM_HEADER_SIGN_IN")
+
+typedef struct {
+    int ic;
+    int focused_ic;
+    sclu32 layout;
+    sclu32 layout_variation;
+    sclboolean caps_mode;
+    sclboolean need_reset;
+    sclboolean visible_state;
+} KEYBOARD_STATE;
+
+void ise_send_string(const sclchar *key_value);
+void ise_update_preedit_string(const sclchar *str);
+void ise_send_event(sclulong key_event, sclulong key_mask);
+void ise_forward_key_event(sclulong key_event);
+
+void ise_focus_in(int ic);
+void ise_focus_out(int ic);
+void ise_attach_input_context(int ic);
+void ise_detach_input_context(int ic);
 void ise_show(int ic);
-void ise_set_mode();
-void ise_hide(bool fCallHided);
-void ise_set_language(unsigned int language);
-void ise_set_lang_to_vconf(unsigned int language);
-void ise_focus_in();
-void ise_new();
-void ise_set_mode(unsigned int mode);
-void ise_explicitly_set_language(unsigned int language);
+void ise_hide();
+void ise_create();
+void ise_destroy();
 void ise_reset_context();
 void ise_reset_input_context();
-void ise_focus_out();
-bool process_option_key_window_events(char *Str);
-void ise_set_private_key(int keyIdx, char* label, char* ImgPath, int valueIdx, char* value );
-void ise_set_disable_key(int keyIdx, int disabled );
-unsigned int ise_get_language();
-unsigned int ise_get_mode();
-void ise_set_layout(mcfu32 layoutIdx);
-mcfu32 ise_get_layout();
-void ise_set_screen_direction(int degree);
-void ise_get_size(int *x, int *y, int *width, int *height);
-void ise_update_cursor_position(int position);
-void ise_update_spot_location(int x, int y);
+void ise_set_layout(sclu32 layout, sclu32 layout_variation);
+void ise_set_screen_rotation(int degree);
+void ise_set_accessibility_state(bool state);
 void ise_set_caps_mode(unsigned int mode);
+void ise_update_cursor_position(int position);
 void ise_set_return_key_type(unsigned int type);
 void ise_set_return_key_disable(unsigned int disabled);
 void ise_get_language_locale(char **locale);
-void _show_language_popup(mcfshort x, mcfshort y);
-SETTING_INFO ise_setting_update_on_reload_config(SETTING_INFO _setup_info);
+void ise_update_table(const std::vector<std::string> &vec_str);
+
 #endif
