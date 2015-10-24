@@ -20,32 +20,49 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
-#include <Ecore_X.h>
+#include <vconf.h>
 #include <Ecore_IMF.h>
 #include <Elementary.h>
 
-#include <X11/XF86keysym.h>
-
-#include <vconf.h>
-#include <vconf-keys.h>
-
-#include "scl.h"
+#include "sclui.h"
+#include "sclcore.h"
+#include "sclutils.h"
 #include "ise.h"
 #include "utils.h"
 #include "option.h"
-#include "common.h"
 #include "languages.h"
 #include "candidate-factory.h"
+#include "ise-emoticon-mode.h"
 #define CANDIDATE_WINDOW_HEIGHT 84
 using namespace scl;
 #include <vector>
 using namespace std;
 
-CSCLUI *gSCLUI = NULL;
-extern CISECommon *g_ise_common;
+CSCLUI *g_ui = NULL;
+
+#include <sclcore.h>
+
+#include "ise.h"
+
+static CCoreEventCallback g_core_event_callback;
+CSCLCore g_core(&g_core_event_callback);
+int g_imdata_state = 0;
+
+extern emoticon_group_t current_emoticon_group;
+extern std::vector <int> emoticon_list_recent;
+
 extern CONFIG_VALUES g_config_values;
 static sclboolean g_need_send_shift_event = FALSE;
+
+extern void set_ise_imdata(const char * buf, size_t &len);
+static void init_recent_used_punctuation();
+static void update_recent_used_punctuation(const char *key_value);
+static sclboolean g_punctuation_popup_opened = FALSE;
+static sclboolean g_popup_opened = FALSE;
+static vector<string> g_recent_used_punctuation;
+static const int MAX_DEFAULT_PUNCTUATION = 6;
+static string g_default_punctuation[MAX_DEFAULT_PUNCTUATION] = {"-", "@", "'", "!", "?", ","};
+static string g_current_punctuation[MAX_DEFAULT_PUNCTUATION-1] = {"RCENT1", "RCENT2", "RCENT3", "RCENT4", "RCENT5"};
 
 KEYBOARD_STATE g_keyboard_state = {
     0,
@@ -58,9 +75,9 @@ KEYBOARD_STATE g_keyboard_state = {
 };
 
 #define ISE_LAYOUT_NUMBERONLY_VARIATION_MAX 4
-const sclchar *g_ise_numberonly_variation_name[ISE_LAYOUT_NUMBERONLY_VARIATION_MAX] = {
+/*static const sclchar *_ise_numberonly_variation_name[ISE_LAYOUT_NUMBERONLY_VARIATION_MAX] = {
     "DEFAULT", "SIG", "DEC", "SIGDEC"
-};
+};*/
 
 #define SIG_DEC_SIZE        2
 static scluint              _click_count = 0;
@@ -77,15 +94,15 @@ class CandidateEventListener: public EventListener
             const MultiEventDesc &multidesc = dynamic_cast<const MultiEventDesc &>(desc);
             switch (multidesc.type) {
                 case MultiEventDesc::CANDIDATE_ITEM_MOUSE_DOWN:
-                    g_ise_common->select_candidate(multidesc.index);
+                    g_core.select_candidate(multidesc.index);
                     break;
                 case MultiEventDesc::CANDIDATE_MORE_VIEW_SHOW:
                     // when more parts shows, click on the candidate will
                     // not affect the key click event
-                    gSCLUI->disable_input_events(TRUE);
+                    g_ui->disable_input_events(TRUE);
                     break;
                 case MultiEventDesc::CANDIDATE_MORE_VIEW_HIDE:
-                    gSCLUI->disable_input_events(FALSE);
+                    g_ui->disable_input_events(FALSE);
                     break;
                 default: break;
             }
@@ -102,7 +119,13 @@ static ISELanguageManager _language_manager;
 #define MVK_Shift_Enable 0x9fe7
 #define MVK_Shift_Disable 0x9fe8
 
-#define USER_KEYSTRING_OPTION "OPTION"
+#define CM_KEY_LIST_SIZE        2
+#define USER_KEYSTRING_OPTION   "OPTION"
+#define USER_KEYSTRING_EMOTICON "EMOTICON_LAYOUT"
+
+static sclboolean           _cm_popup_opened = FALSE;
+static const char          *_cm_key_list [CM_KEY_LIST_SIZE] = {USER_KEYSTRING_OPTION, USER_KEYSTRING_EMOTICON};
+static scluint              _current_cm_key_id = 0;
 
 /*
  * This callback class will receive all response events from SCL
@@ -127,6 +150,275 @@ check_ic_temporary(int ic)
     return FALSE;
 }
 
+static void _reset_shift_state (void)
+{
+    if (g_ui) {
+        /* Reset all shift state variables */
+        SCLShiftState old_shift_state = g_ui->get_shift_state ();
+        SCLShiftState new_shift_state = SCL_SHIFT_STATE_OFF;
+        if (old_shift_state != new_shift_state) {
+            g_need_send_shift_event = true;
+            g_ui->set_shift_state (new_shift_state);
+        }
+        LOGD ("Shift state changed from (%d) to (%d)", (int)old_shift_state, (int)new_shift_state);
+    }
+}
+
+static void ise_set_cm_private_key (scluint cm_key_id)
+{
+    if (cm_key_id >= CM_KEY_LIST_SIZE || g_ui == NULL) {
+        LOGE ("cm_key_id=%d", cm_key_id);
+        return;
+    }
+
+    if (strcmp (_cm_key_list[cm_key_id], USER_KEYSTRING_EMOTICON) == 0) {
+        sclchar* imagelabel[SCL_BUTTON_STATE_MAX] = {
+            const_cast<sclchar*>("emoticon/icon_emotion_nor_55x55.png"),
+            const_cast<sclchar*>("emoticon/icon_emotion_press_55x55.png"),
+            const_cast<sclchar*>("emoticon/icon_emotion_dim_55x55.png")};
+        g_ui->set_private_key("CM_KEY", "", imagelabel, NULL, 0, USER_KEYSTRING_EMOTICON, TRUE);
+    } else if (strcmp (_cm_key_list[cm_key_id], USER_KEYSTRING_OPTION) == 0) {
+        sclchar* imagelabel[SCL_BUTTON_STATE_MAX] = {
+            const_cast<sclchar*>("setting icon/B09_icon_setting_nor_54x54.png"),
+            const_cast<sclchar*>("setting icon/B09_icon_setting_press_54x54.png"),
+            const_cast<sclchar*>("setting icon/B09_icon_setting_dim_54x54.png")};
+        g_ui->set_private_key("CM_KEY", "", imagelabel, NULL, 0, USER_KEYSTRING_OPTION, TRUE);
+    }
+}
+
+static scluint ise_get_cm_key_id (const sclchar *key_value)
+{
+    for (int i = 0; i < CM_KEY_LIST_SIZE; ++i) {
+        if (0 == strcmp (key_value, _cm_key_list[i]))
+            return i;
+    }
+    return 0;
+}
+
+static bool ise_is_emoticons_disabled (void)
+{
+    bool ret = true;
+    sclu32 current_layout = g_keyboard_state.layout;
+    LOGD ("layout=%d", current_layout);
+
+    if ((current_layout == ISE_LAYOUT_STYLE_NORMAL) ||
+        (current_layout == ISE_LAYOUT_STYLE_NUMBER) ||
+        (current_layout == ISE_LAYOUT_STYLE_EMOTICON))
+        ret = false;
+
+    if (g_imdata_state & IMDATA_ACTION_DISABLE_EMOTICONS)
+        ret = true;
+
+    return ret;
+}
+
+void CCoreEventCallback::on_init()
+{
+    LOGD("CCoreEventCallback::init()\n");
+    ise_create();
+}
+
+void CCoreEventCallback::on_run(int argc, char **argv)
+{
+    LOGD("CCoreEventCallback::on_run()\n");
+    g_core.run();
+}
+
+void CCoreEventCallback::on_exit()
+{
+    ::ise_hide();
+    ise_destroy();
+}
+
+void CCoreEventCallback::on_attach_input_context(sclint ic, const sclchar *ic_uuid)
+{
+    ise_attach_input_context(ic);
+}
+
+void CCoreEventCallback::on_detach_input_context(sclint ic, const sclchar *ic_uuid)
+{
+    ise_detach_input_context(ic);
+}
+
+void CCoreEventCallback::on_focus_in(sclint ic, const sclchar *ic_uuid)
+{
+    LOGD("Enter");
+    ise_focus_in(ic);
+}
+
+void CCoreEventCallback::on_focus_out(sclint ic, const sclchar *ic_uuid)
+{
+    LOGD("Enter");
+    ise_focus_out(ic);
+    g_imdata_state = 0;
+}
+
+void CCoreEventCallback::on_ise_show(sclint ic, const sclint degree, Ise_Context &context)
+{
+    //g_ise_common->set_keyboard_ise_by_uuid(KEYBD_ISE_UUID);
+
+    ise_reset_context(); // reset ISE
+
+    /*if (context.language == ECORE_IMF_INPUT_PANEL_LANG_ALPHABET) {
+        ise_explictly_set_language(PRIMARY_LATIN_LANGUAGE_INDEX);
+    }*/
+
+    ise_set_layout(context.layout, context.layout_variation);
+
+    ise_set_return_key_type(context.return_key_type);
+    ise_set_return_key_disable(context.return_key_disabled);
+
+    ise_set_caps_mode(context.caps_mode);
+    ise_update_cursor_position(context.cursor_pos);
+
+    /* Do not follow the application's rotation angle if we are already in visible state,
+       since in that case we will receive the angle through ROTATION_CHANGE_REQUEST message */
+    if (!(g_keyboard_state.visible_state)) {
+        ise_set_screen_rotation(degree);
+    } else {
+        LOGD("Skipping rotation angle , %d", degree);
+    }
+
+    ::ise_show(ic);
+}
+
+void CCoreEventCallback::on_ise_hide(sclint ic, const sclchar *ic_uuid)
+{
+    ::ise_hide();
+}
+
+void CCoreEventCallback::on_reset_input_context(sclint ic, const sclchar *uuid)
+{
+    ise_reset_input_context();
+}
+
+void CCoreEventCallback::on_set_display_language(const sclchar *language)
+{
+    setlocale(LC_ALL, language);
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
+
+    LOGD("Language : %s\n", (language ? language : "NULL"));
+}
+
+void CCoreEventCallback::on_set_accessibility_state(const sclboolean state)
+{
+    LOGD ("state=%d", state);
+    ise_set_accessibility_state(state);
+}
+
+void CCoreEventCallback::on_set_rotation_degree(sclint degree)
+{
+    ise_set_screen_rotation(degree);
+
+    LOGD ("degree=%d", degree);
+    if (is_emoticon_show ()) {
+        ise_destroy_emoticon_window ();
+    }
+    if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_EMOTICON) {
+        ise_show_emoticon_window (current_emoticon_group, degree, false, g_core.get_main_window ());
+    } else if (g_ui) {
+        const sclchar *input_mode = g_ui->get_input_mode ();
+        if (input_mode) {
+            if (!(strcmp(input_mode, "EMOTICON_LAYOUT")))
+                ise_show_emoticon_window (current_emoticon_group, degree, false, g_core.get_main_window ());
+        }
+    }
+}
+
+void CCoreEventCallback::on_set_layout(sclu32 layout)
+{
+    LOGD ("layout=%d", layout);
+    /* Check if the layoutIdx is in the valid range */
+    if (layout < ISE_LAYOUT_STYLE_MAX) {
+        if (g_keyboard_state.layout != layout) {
+            g_keyboard_state.need_reset = TRUE;
+        }
+        g_keyboard_state.layout = layout;
+    }
+    if (g_keyboard_state.visible_state)
+        ise_show (g_keyboard_state.ic);
+}
+
+void CCoreEventCallback::on_set_caps_mode(sclu32 mode)
+{
+    ise_set_caps_mode(mode);
+}
+
+void CCoreEventCallback::on_update_cursor_position(sclint ic, const sclchar *ic_uuid, sclint cursor_pos)
+{
+    ise_update_cursor_position(cursor_pos);
+}
+
+void CCoreEventCallback::on_update_surrounding_text(sclint ic, const sclchar *text, sclint cursor)
+{
+    LOGD ("surrounding text:%s, cursor=%d", text, cursor);
+    g_core.delete_surrounding_text (-cursor, strlen (text));
+}
+
+void CCoreEventCallback::on_set_return_key_type (sclu32 type)
+{
+    ise_set_return_key_type(type);
+}
+
+void CCoreEventCallback::on_set_return_key_disable (sclu32 disabled)
+{
+    ise_set_return_key_disable(disabled);
+}
+
+void CCoreEventCallback::on_set_imdata(sclchar *buf, sclu32 len)
+{
+    LOGD ("Enter");
+    g_imdata_state = 0;
+    set_ise_imdata(buf, len);
+}
+
+void CCoreEventCallback::on_get_language_locale(sclint ic, sclchar **locale)
+{
+    ise_get_language_locale(locale);
+}
+
+void CCoreEventCallback::on_update_lookup_table(SclCandidateTable &table)
+{
+    vector<string> vec_str;
+    //printf("candidate num: %d, current_page_size: %d\n",
+    //    table.number_of_candidates(), table.get_current_page_size());
+    for (int i = table.current_page_start; i < table.current_page_start + table.page_size; ++i)
+    {
+        if (i < (int)table.candidate_labels.size()) {
+            vec_str.push_back(table.candidate_labels[i]);
+        }
+    }
+    ise_update_table(vec_str);
+}
+
+void CCoreEventCallback::on_create_option_window(sclwindow window, SCLOptionWindowType type)
+{
+    if (window) {
+        option_window_created(NATIVE_WINDOW_CAST(window), type);
+    }
+}
+
+void CCoreEventCallback::on_destroy_option_window(sclwindow window)
+{
+    option_window_destroyed(NATIVE_WINDOW_CAST(window));
+}
+
+void CCoreEventCallback::on_check_option_window_availability(sclboolean *ret)
+{
+    if (ret)
+        *ret = true;   // Tizen keyboard (ise-default) has the option window, but 3rd party IME may not. This interface is for it.
+}
+
+/**
+* This is only for the TV profile to handle remote control button
+* It will be called in the TV profile by ISF logic.
+*/
+void CCoreEventCallback::on_process_key_event(scim::KeyEvent &key, sclu32 *ret)
+{
+    ise_process_key_event(key, *ret);
+}
+
 /**
  * Send the given string to input framework
  */
@@ -137,8 +429,8 @@ ise_send_string(const sclchar *key_value)
     if (!check_ic_temporary(g_keyboard_state.ic)) {
         ic = g_keyboard_state.ic;
     }
-    g_ise_common->hide_preedit_string(ic, "");
-    g_ise_common->commit_string(ic, "", key_value);
+    g_core.hide_preedit_string(ic, "");
+    g_core.commit_string(ic, "", key_value);
     LOGD("ic : %x, %s", ic, key_value);
 }
 
@@ -152,7 +444,7 @@ ise_update_preedit_string(const sclchar *str)
     if (!check_ic_temporary(g_keyboard_state.ic)) {
         ic = g_keyboard_state.ic;
     }
-    g_ise_common->update_preedit_string(ic, "", str);
+    g_core.update_preedit_string(ic, "", str);
     LOGD("ic : %x, %s", ic, str);
 }
 
@@ -166,8 +458,8 @@ ise_send_event(sclulong key_event, sclulong key_mask)
     if (!check_ic_temporary(g_keyboard_state.ic)) {
         ic = g_keyboard_state.ic;
     }
-    g_ise_common->send_key_event(ic, "", key_event, scim::SCIM_KEY_NullMask);
-    g_ise_common->send_key_event(ic, "", key_event, scim::SCIM_KEY_ReleaseMask);
+    g_core.send_key_event(ic, "", key_event, KEY_MASK_NULL);
+    g_core.send_key_event(ic, "", key_event, KEY_MASK_RELEASE);
     LOGD("ic : %x, %x", ic, key_event);
 }
 
@@ -181,14 +473,16 @@ ise_forward_key_event(sclulong key_event)
     if (!check_ic_temporary(g_keyboard_state.ic)) {
         ic = g_keyboard_state.ic;
     }
-    g_ise_common->forward_key_event(ic, "", key_event, scim::SCIM_KEY_NullMask);
-    g_ise_common->forward_key_event(ic, "", key_event, scim::SCIM_KEY_ReleaseMask);
+    g_core.forward_key_event(ic, "", key_event, KEY_MASK_NULL);
+    g_core.forward_key_event(ic, "", key_event, KEY_MASK_RELEASE);
     LOGD("ic : %x, %x", ic, key_event);
 }
 
 static void set_caps_mode(sclint mode) {
-    if (gSCLUI->get_shift_state() != SCL_SHIFT_STATE_LOCK) {
-        gSCLUI->set_shift_state(mode ? SCL_SHIFT_STATE_ON : SCL_SHIFT_STATE_OFF);
+    if (g_ui) {
+        if (g_ui->get_shift_state() != SCL_SHIFT_STATE_LOCK) {
+            g_ui->set_shift_state(mode ? SCL_SHIFT_STATE_ON : SCL_SHIFT_STATE_OFF);
+        }
     }
 }
 
@@ -215,7 +509,7 @@ static void delete_commit_timer (void)
 static Eina_Bool commit_timeout (void *data)
 {
     if (_commit_timer != NULL) {
-        g_ise_common->hide_preedit_string (-1, "");
+        g_core.hide_preedit_string (-1, "");
         ise_forward_key_event (_sig_dec_event[(_click_count-1)%SIG_DEC_SIZE]);
         _click_count = 0;
     }
@@ -228,7 +522,7 @@ on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_t
 {
     sclboolean ret = FALSE;
 
-    if (gSCLUI) {
+    if (g_ui) {
         if (key_value) {
             if (strcmp(key_value, "CUR_LANG") == 0) {
                 ret = _language_manager.select_current_language();
@@ -237,17 +531,32 @@ on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_t
                 ret = _language_manager.select_next_language();
             }
         }
+
         const sclchar * cur_lang = _language_manager.get_current_language();
         if (cur_lang) {
             LANGUAGE_INFO *info = _language_manager.get_language_info(cur_lang);
             if (info) {
                 if (info->accepts_caps_mode) {
-                    ise_send_event(MVK_Shift_Enable, scim::SCIM_KEY_NullMask);
+                    ise_send_event(MVK_Shift_Enable, KEY_MASK_NULL);
                     set_caps_mode(g_keyboard_state.caps_mode);
                 } else {
-                    ise_send_event(MVK_Shift_Disable, scim::SCIM_KEY_NullMask);
-                    gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                    ise_send_event(MVK_Shift_Disable, KEY_MASK_NULL);
+                    g_ui->set_shift_state(SCL_SHIFT_STATE_OFF);
                 }
+            }
+        }
+        if(is_emoticon_show()){
+            ise_destroy_emoticon_window();
+        }
+        if (key_value) {
+            if(!strcmp(key_value, USER_KEYSTRING_EMOTICON)){
+                ise_init_emoticon_list();
+                if(emoticon_list_recent.size() == 0)
+                    current_emoticon_group = EMOTICON_GROUP_1;
+                else
+                    current_emoticon_group = EMOTICON_GROUP_RECENTLY_USED;
+                SCLRotation rotation = g_ui->get_rotation();
+                ise_show_emoticon_window(current_emoticon_group, ROTATION_TO_DEGREE(rotation), false, g_core.get_main_window());
             }
         }
     }
@@ -259,6 +568,7 @@ on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_t
 SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info)
 {
     SCLEventReturnType ret = SCL_EVENT_PASS_ON;
+    LOGD ("noti type: %d, g_need_send_shift_event: %d", noti_type, g_need_send_shift_event);
 
     if (noti_type == SCL_UINOTITYPE_SHIFT_STATE_CHANGE) {
         if (g_need_send_shift_event) {
@@ -268,20 +578,48 @@ SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_ty
                 SclNotiShiftStateChangeDesc *desc = static_cast<SclNotiShiftStateChangeDesc*>(etc_info);
                 if (info && desc) {
                     if (info->accepts_caps_mode) {
+                        LOGD ("shift state: %d", desc->shift_state);
                         if (desc->shift_state == SCL_SHIFT_STATE_OFF) {
-                            ise_send_event(MVK_Shift_Off, scim::SCIM_KEY_NullMask);
+                            ise_send_event(MVK_Shift_Off, KEY_MASK_NULL);
                         }
                         else if (desc->shift_state == SCL_SHIFT_STATE_ON) {
-                            ise_send_event(MVK_Shift_On, scim::SCIM_KEY_NullMask);
+                            ise_send_event(MVK_Shift_On, KEY_MASK_NULL);
                         }
                         else if (desc->shift_state == SCL_SHIFT_STATE_LOCK) {
-                            ise_send_event(MVK_Shift_Lock, scim::SCIM_KEY_NullMask);
+                            ise_send_event(MVK_Shift_Lock, KEY_MASK_NULL);
                         }
                         ret = SCL_EVENT_PASS_ON;
                     }
                 }
             }
             g_need_send_shift_event = FALSE;
+        }
+    }
+    else if(noti_type == SCL_UINOTITYPE_POPUP_OPENING)
+    {
+        vector<string>::reverse_iterator iter = g_recent_used_punctuation.rbegin();
+        int punc_pos = 0;
+        for(; iter!=g_recent_used_punctuation.rend(); ++iter)
+        {
+            g_ui->set_string_substitution(g_current_punctuation[punc_pos].c_str(), iter->c_str());
+            punc_pos++;
+        }
+        SclNotiPopupOpeningDesc *openingDesc = (SclNotiPopupOpeningDesc *)etc_info;
+        if (0 == strcmp (openingDesc->input_mode, "CM_POPUP")) {
+            if (ise_is_emoticons_disabled ())
+                g_ui->enable_button ("EMOTICON_KEY", false);
+            else
+                g_ui->enable_button ("EMOTICON_KEY", true);
+        }
+    }
+    else if(noti_type == SCL_UINOTITYPE_POPUP_OPENED)
+    {
+        g_popup_opened = TRUE;
+        SclNotiPopupOpenedDesc *openedDesc = (SclNotiPopupOpenedDesc *)etc_info;
+        if (0 == strcmp (openedDesc->input_mode, "PUNCTUATION_POPUP")) {
+            g_punctuation_popup_opened = TRUE;
+        } else if (0 == strcmp (openedDesc->input_mode, "CM_POPUP")) {
+            _cm_popup_opened = TRUE;
         }
     }
 
@@ -297,9 +635,9 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
 {
     SCLEventReturnType ret = SCL_EVENT_PASS_ON;
 
-    if (gSCLUI) {
+    if (g_ui) {
         switch (event_desc.key_type) {
-        case KEY_TYPE_STRING:
+        case KEY_TYPE_STRING:{
             if (event_desc.key_modifier != KEY_MODIFIER_MULTITAP_START &&
                 event_desc.key_modifier != KEY_MODIFIER_MULTITAP_REPEAT) {
                     if (event_desc.key_event) {
@@ -308,11 +646,22 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                         ise_send_string(event_desc.key_value);
                     }
             }
+            if(!g_popup_opened){
+                const sclchar *input_mode = g_ui->get_input_mode();
+                if(input_mode && ((0 == strcmp(input_mode, "SYM_QTY_1")) || (0 == strcmp(input_mode, "SYM_QTY_2")))){
+                    update_recent_used_punctuation(event_desc.key_value);
+                }
+            }else if(g_punctuation_popup_opened){
+                update_recent_used_punctuation(event_desc.key_value);
+                g_punctuation_popup_opened = FALSE;
+                g_popup_opened = FALSE;
+            }
             break;
+        }
         case KEY_TYPE_CHAR: {
                 sclboolean need_forward = FALSE;
                 // FIXME : Should decide when to forward key events
-                const sclchar *input_mode = gSCLUI->get_input_mode();
+                const sclchar *input_mode = g_ui->get_input_mode();
                 if (input_mode) {
                     if (strcmp(input_mode, "SYM_QTY_1") == 0 ||
                             strcmp(input_mode, "SYM_QTY_2") == 0 ||
@@ -329,8 +678,8 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                 }
                 if (input_mode && strcmp (input_mode, "NUMONLY_3X4_SIGDEC") == 0 &&
                     strcmp (event_desc.key_value, ".") == 0) {
-                    g_ise_common->update_preedit_string (-1, "", _sig_dec[_click_count%SIG_DEC_SIZE]);
-                    g_ise_common->show_preedit_string (-1, "");
+                    g_core.update_preedit_string (-1, "", _sig_dec[_click_count%SIG_DEC_SIZE]);
+                    g_core.show_preedit_string (-1, "");
                     delete_commit_timer ();
                     _commit_timer = ecore_timer_add (1.0, commit_timeout, NULL);
                     _click_count++;
@@ -339,7 +688,12 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                     if (need_forward) {
                         ise_forward_key_event(event_desc.key_event);
                     } else {
-                        ise_send_event(event_desc.key_event, scim::SCIM_KEY_NullMask);
+                        ise_send_event(event_desc.key_event, KEY_MASK_NULL);
+                    }
+                }
+                if (input_mode){
+                    if((strcmp(input_mode, "SYM_QTY_1") == 0) || (0 == strcmp(input_mode, "SYM_QTY_2"))){
+                        update_recent_used_punctuation(event_desc.key_value);
                     }
                 }
                 break;
@@ -347,22 +701,86 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
         case KEY_TYPE_CONTROL: {
                 commit_timeout (NULL);
                 if (event_desc.key_event) {
-                    ise_send_event(event_desc.key_event, scim::SCIM_KEY_NullMask);
-                    if (event_desc.key_event == MVK_Shift_L) {
+                    const char *long_shift = "LongShift";
+                    const char *caps_lock = "CapsLock";
+                    const char *delete_all = "DeleteAll";
+                    const char *hide_panel = "Hide";
+                    if (strncmp (event_desc.key_value, long_shift, strlen (long_shift)) == 0) {
+                        LOGD ("shift key is longpress");
+                        g_ui->set_shift_state (SCL_SHIFT_STATE_ON);
                         g_need_send_shift_event = TRUE;
+                        //ise_send_event (MVK_Shift_Lock, KEY_MASK_NULL);
+                    } else if (strncmp (event_desc.key_value, caps_lock, strlen (caps_lock)) == 0) {
+                        if (g_ui->get_shift_state() != SCL_SHIFT_STATE_LOCK) {
+                            g_ui->set_shift_state (SCL_SHIFT_STATE_LOCK);
+                            ise_send_event (MVK_Shift_Lock, KEY_MASK_NULL);
+                        } else {
+                            g_ui->set_shift_state (SCL_SHIFT_STATE_OFF);
+                            ise_send_event (MVK_Shift_Off, KEY_MASK_NULL);
+                        }
+                        //g_need_send_shift_event = TRUE;
+                    } else if (strncmp (event_desc.key_value, delete_all, strlen (delete_all)) == 0) {
+                        g_core.get_surrounding_text (NULL, -1, -1);
+                    } else if (strncmp (event_desc.key_value, hide_panel, strlen (hide_panel)) == 0) {
+                        ::ise_hide();
+                    } else {
+                        ise_send_event(event_desc.key_event, KEY_MASK_NULL);
+                        if (event_desc.key_event == MVK_Shift_L) {
+                            g_need_send_shift_event = TRUE;
+                        }
                     }
                 }
                 break;
            }
         case KEY_TYPE_MODECHANGE:
-            if (on_input_mode_changed(event_desc.key_value, event_desc.key_event, event_desc.key_type)) {
+            if (strcmp (event_desc.key_value, USER_KEYSTRING_OPTION) == 0) {
+                g_core.create_option_window ();
                 ret = SCL_EVENT_DONE;
+            } else if (on_input_mode_changed (event_desc.key_value, event_desc.key_event, event_desc.key_type)) {
+                ret = SCL_EVENT_DONE;
+            }
+            if (_cm_popup_opened) {
+                if (strcmp (event_desc.key_value, USER_KEYSTRING_EMOTICON) == 0) {
+                    scluint id = ise_get_cm_key_id (event_desc.key_value);
+                    if (id != _current_cm_key_id) {
+                        _current_cm_key_id = id;
+                        ise_set_cm_private_key (_current_cm_key_id);
+                    }
+                }
+                _cm_popup_opened = FALSE;
             }
             break;
         case KEY_TYPE_USER:
             if (strcmp(event_desc.key_value, USER_KEYSTRING_OPTION) == 0) {
-                open_option_window(NULL, ROTATION_TO_DEGREE(gSCLUI->get_rotation()));
+                //open_option_window(NULL, ROTATION_TO_DEGREE(g_ui->get_rotation()));
+                g_core.create_option_window();
                 ret = SCL_EVENT_DONE;
+            }
+            else{
+                const sclchar *input_mode = g_ui->get_input_mode();
+                if((NULL != input_mode) && (!strcmp(input_mode, "EMOTICON_LAYOUT")))
+                {
+                    if(is_emoticon_show())
+                    {
+                        ise_destroy_emoticon_window();
+                    }
+                    emoticon_group_t group_id = ise_get_emoticon_group_id(event_desc.key_value);
+                    if((group_id >= 0) && (group_id < MAX_EMOTICON_GROUP))
+                    {
+                        SCLRotation rotation = g_ui->get_rotation();
+                        ise_show_emoticon_window(group_id, ROTATION_TO_DEGREE(rotation), false, g_core.get_main_window());
+                    }
+                }
+            }
+            if (_cm_popup_opened) {
+                if (strcmp (event_desc.key_value, USER_KEYSTRING_OPTION) == 0) {
+                    scluint id = ise_get_cm_key_id (USER_KEYSTRING_OPTION);
+                    if (id != _current_cm_key_id) {
+                        _current_cm_key_id = id;
+                        ise_set_cm_private_key (_current_cm_key_id);
+                    }
+                }
+                _cm_popup_opened = FALSE;
             }
             break;
         default:
@@ -409,15 +827,11 @@ ise_focus_in(int ic)
     }
     g_keyboard_state.focused_ic = ic;
     if (ic == g_keyboard_state.ic) {
-        if (g_ise_common) {
-            if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_PHONENUMBER ||
-                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_IP ||
-                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_MONTH ||
-                    g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY) {
-                g_ise_common->set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
-            } else {
-                g_ise_common->set_keyboard_ise_by_uuid(g_ise_common->get_keyboard_ise_uuid().c_str());
-            }
+        if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_PHONENUMBER ||
+                g_keyboard_state.layout == ISE_LAYOUT_STYLE_IP ||
+                g_keyboard_state.layout == ISE_LAYOUT_STYLE_MONTH ||
+                g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY) {
+            g_core.set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
         }
     }
 }
@@ -447,13 +861,13 @@ void
 ise_show(int ic)
 {
     sclboolean reset_inputmode = FALSE;
-    if (gSCLUI && g_ise_common) {
+    if (g_ui) {
 
         read_ise_config_values();
 
         _language_manager.set_enabled_languages(g_config_values.enabled_languages);
 
-    LOGD("ic : %x , %x , g_ic : %x , %x, g_focused_ic : %x , %x", ic, check_ic_temporary(ic),
+        LOGD("ic : %x , %x , g_ic : %x , %x, g_focused_ic : %x , %x", ic, check_ic_temporary(ic),
             g_keyboard_state.ic, check_ic_temporary(g_keyboard_state.ic),
             g_keyboard_state.focused_ic, check_ic_temporary(g_keyboard_state.focused_ic));
         if (check_ic_temporary(ic) && !check_ic_temporary(g_keyboard_state.focused_ic)) {
@@ -467,7 +881,7 @@ ise_show(int ic)
                     g_keyboard_state.layout == ISE_LAYOUT_STYLE_IP ||
                     g_keyboard_state.layout == ISE_LAYOUT_STYLE_MONTH ||
                     g_keyboard_state.layout == ISE_LAYOUT_STYLE_NUMBERONLY) {
-                g_ise_common->set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
+                g_core.set_keyboard_ise_by_uuid(DEFAULT_KEYBOARD_ISE_UUID);
             }
         }
 
@@ -506,7 +920,7 @@ ise_show(int ic)
 
             /* Turn the shift state off if we need to reset our input mode, only when auto-capitalization is not set  */
             if (!(g_keyboard_state.caps_mode)) {
-                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                g_ui->set_shift_state(SCL_SHIFT_STATE_OFF);
             }
             if (g_keyboard_state.layout < ISE_LAYOUT_STYLE_MAX) {
                 sclu32 layout_index = g_keyboard_state.layout;
@@ -514,15 +928,19 @@ ise_show(int ic)
                     g_keyboard_state.layout_variation > 0 &&
                     g_keyboard_state.layout_variation < ISE_LAYOUT_NUMBERONLY_VARIATION_MAX) {
                     layout_index = ISE_LAYOUT_STYLE_NUMBERONLY_SIG + g_keyboard_state.layout_variation - 1;
+                } else if (g_keyboard_state.layout == ISE_LAYOUT_STYLE_PASSWORD && g_keyboard_state.layout_variation > 0) {
+                    layout_index = ISE_LAYOUT_STYLE_PASSWD_3X4;
                 }
 
+                LOGD ("new layout index:%d", layout_index);
+                const sclchar *old_input_mode = g_ui->get_input_mode ();
                 /* If this layout requires specific input mode, set it */
                 if (strlen(g_ise_default_values[layout_index].input_mode) > 0) {
-                    gSCLUI->set_input_mode(g_ise_default_values[layout_index].input_mode);
+                    g_ui->set_input_mode(g_ise_default_values[layout_index].input_mode);
 
-                    SclSize size_portrait = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_PORTRAIT);
-                    SclSize size_landscape = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_LANDSCAPE);
-                    g_ise_common->set_keyboard_size_hints(size_portrait, size_landscape);
+                    SclSize size_portrait = g_ui->get_input_mode_size(g_ui->get_input_mode(), DISPLAYMODE_PORTRAIT);
+                    SclSize size_landscape = g_ui->get_input_mode_size(g_ui->get_input_mode(), DISPLAYMODE_LANDSCAPE);
+                    g_core.set_keyboard_size_hints(size_portrait, size_landscape);
                 } else {
                     if (force_primary_latin) {
                         _language_manager.select_language(PRIMARY_LATIN_LANGUAGE, TRUE);
@@ -532,7 +950,43 @@ ise_show(int ic)
                         }
                     }
                 }
-                gSCLUI->set_cur_sublayout(g_ise_default_values[g_keyboard_state.layout].sublayout_name);
+                g_ui->set_cur_sublayout(g_ise_default_values[layout_index].sublayout_name);
+                if(is_emoticon_show()){
+                    ise_destroy_emoticon_window();
+                }
+                if(g_keyboard_state.layout == ISE_LAYOUT_STYLE_EMOTICON){
+                    ise_init_emoticon_list();
+                    if(emoticon_list_recent.size() == 0)
+                        current_emoticon_group = EMOTICON_GROUP_1;
+                    else
+                        current_emoticon_group = EMOTICON_GROUP_RECENTLY_USED;
+                    SCLRotation rotation = g_ui->get_rotation();
+                    ise_show_emoticon_window(current_emoticon_group, ROTATION_TO_DEGREE(rotation), false, g_core.get_main_window());
+                }
+                // Check whether inout panel geometry is changed.
+                const sclchar *new_input_mode = g_ui->get_input_mode ();
+                if (g_keyboard_state.visible_state && old_input_mode && new_input_mode && strcmp (old_input_mode, new_input_mode)) {
+                    SclSize new_portrait = g_ui->get_input_mode_size (new_input_mode, DISPLAYMODE_PORTRAIT);
+                    SclSize new_landscape = g_ui->get_input_mode_size (new_input_mode, DISPLAYMODE_LANDSCAPE);
+                    LOGD ("old input mode:%s, new input mode:%s, portrait(%d, %d), landscape(%d, %d)",
+                        old_input_mode, new_input_mode, new_portrait.width, new_portrait.height, new_landscape.width, new_landscape.height);
+
+                    sclint width = 0;
+                    sclint height = 0;
+                    g_ui->get_screen_resolution (&width, &height);
+
+                    SclSize old_size = {0, 0};
+                    SCLRotation rotation = g_ui->get_rotation ();
+                    if (rotation == ROTATION_90_CW || rotation == ROTATION_90_CCW) {
+                        old_size = g_ui->get_input_mode_size(old_input_mode, DISPLAYMODE_LANDSCAPE);
+                        if (old_size.width != new_landscape.width || old_size.height != new_landscape.height)
+                            g_core.update_geometry (0, 0, new_landscape.width, new_landscape.height);
+                    } else {
+                        old_size = g_ui->get_input_mode_size(old_input_mode, DISPLAYMODE_PORTRAIT);
+                        if (old_size.width != new_portrait.width || old_size.height != new_portrait.height)
+                            g_core.update_geometry (0, height - new_portrait.height, new_portrait.width, new_portrait.height);
+                    }
+                }
             }
         }
 
@@ -540,28 +994,38 @@ ise_show(int ic)
             if (info->accepts_caps_mode) {
                 // FIXME this if condition means the AC is off
                 if (g_keyboard_state.layout != ISE_LAYOUT_STYLE_NORMAL) {
-                    gSCLUI->set_autocapital_shift_state(TRUE);
-                    gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                    g_ui->set_autocapital_shift_state(TRUE);
+                    g_ui->set_shift_state(SCL_SHIFT_STATE_OFF);
                 }
                 // normal layout means the AC is on
                 else {
-                    ise_send_event(MVK_Shift_Enable, scim::SCIM_KEY_NullMask);
-                    gSCLUI->set_autocapital_shift_state(FALSE);
+                    ise_send_event(MVK_Shift_Enable, KEY_MASK_NULL);
+                    g_ui->set_autocapital_shift_state(FALSE);
                 }
             } else {
-                gSCLUI->set_autocapital_shift_state(TRUE);
-                ise_send_event(MVK_Shift_Disable, scim::SCIM_KEY_NullMask);
-                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                g_ui->set_autocapital_shift_state(TRUE);
+                ise_send_event(MVK_Shift_Disable, KEY_MASK_NULL);
+                g_ui->set_shift_state(SCL_SHIFT_STATE_OFF);
             }
         } else {
-            gSCLUI->set_autocapital_shift_state(TRUE);
+            g_ui->set_autocapital_shift_state(TRUE);
         }
 
-        gSCLUI->show();
-        gSCLUI->disable_input_events(FALSE);
+        // Update CM key button
+        if (strcmp (_cm_key_list[_current_cm_key_id], USER_KEYSTRING_EMOTICON) == 0) {
+            if (ise_is_emoticons_disabled ())
+                ise_set_cm_private_key (ise_get_cm_key_id (USER_KEYSTRING_OPTION));
+            else
+                ise_set_cm_private_key (_current_cm_key_id);
+        }
+
+        g_ui->show();
+        g_ui->disable_input_events(FALSE);
     }
 
-    g_candidate->show();
+    if (g_candidate) {
+        g_candidate->show();
+    }
     g_keyboard_state.visible_state = TRUE;
 }
 
@@ -571,8 +1035,8 @@ ise_show(int ic)
 void
 ise_set_screen_rotation(int degree)
 {
-    if (gSCLUI) {
-        gSCLUI->set_rotation(DEGREE_TO_SCLROTATION(degree));
+    if (g_ui) {
+        g_ui->set_rotation(DEGREE_TO_SCLROTATION(degree));
     }
     if (g_candidate) {
         g_candidate->rotate(degree);
@@ -582,8 +1046,8 @@ ise_set_screen_rotation(int degree)
 void
 ise_set_accessibility_state(bool state)
 {
-    if (gSCLUI) {
-        gSCLUI->enable_tts(state);
+    if (g_ui) {
+        g_ui->enable_tts(state);
     }
 }
 
@@ -592,21 +1056,22 @@ ise_hide()
 {
     _click_count = 0;
     delete_commit_timer ();
-    if (gSCLUI && g_ise_common) {
-        gSCLUI->disable_input_events(TRUE);
-        gSCLUI->hide();
+    if (g_ui) {
+        g_ui->disable_input_events(TRUE);
+        g_ui->hide();
     }
     g_keyboard_state.visible_state = FALSE;
     if (g_candidate) {
         g_candidate->hide();
     }
+    _reset_shift_state ();
 }
 
 void
 ise_create()
 {
-    if (!gSCLUI) {
-        gSCLUI = new CSCLUI;
+    if (!g_ui) {
+        g_ui = new CSCLUI;
     }
 
     /* Set scl_parser_type
@@ -625,29 +1090,48 @@ ise_create()
     }
 
 
-    if (gSCLUI && g_ise_common) {
-        if (g_ise_common->get_main_window()) {
+    if (g_ui) {
+        if (g_core.get_main_window()) {
             sclboolean succeeded = FALSE;
 
+            const sclchar *entry_path = MAIN_ENTRY_XML_PATH;
+            int nwidth  = 0;
+            int nheight = 0;
+            CSCLUtils *utils = CSCLUtils::get_instance();
+            if (utils) {
+                utils->get_screen_resolution(&nwidth, &nheight);
+            }
+#ifndef _TV
+            if ((480 == nwidth) && (800 == nheight)) {
+                entry_path = MAIN_ENTRY_XML_PATH_480X800;
+            }
+            else if ((540 == nwidth) && (960 == nheight)) {
+                entry_path = MAIN_ENTRY_XML_PATH_540X960;
+            }
+            else if ((1440 == nwidth) && (2560 == nheight)) {
+                entry_path = MAIN_ENTRY_XML_PATH_1440X2560;
+            }
+#endif
+            _language_manager.set_resource_file_path(entry_path);
             const sclchar *resource_file_path = _language_manager.get_resource_file_path();
 
             if (resource_file_path) {
                 if (strlen(resource_file_path) > 0) {
-                    succeeded = gSCLUI->init((sclwindow)g_ise_common->get_main_window(), scl_parser_type, resource_file_path);
+                    succeeded = g_ui->init(g_core.get_main_window(), scl_parser_type, resource_file_path);
                 }
             }
             if (!succeeded) {
-                gSCLUI->init((sclwindow)g_ise_common->get_main_window(), scl_parser_type, MAIN_ENTRY_XML_PATH);
+                g_ui->init(g_core.get_main_window(), scl_parser_type, MAIN_ENTRY_XML_PATH);
             }
             // FIXME whether to use global var, need to check
             if (g_candidate == NULL) {
-                g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_ise_common->get_main_window());
+                g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_core.get_main_window());
             }
             g_candidate->add_event_listener(&g_candidate_event_listener);
-            gSCLUI->set_longkey_duration(elm_config_longpress_timeout_get() * 1000);
+            g_ui->set_longkey_duration(elm_config_longpress_timeout_get() * 1000);
 
             /* Default ISE callback */
-            gSCLUI->set_ui_event_callback(&callback);
+            g_ui->set_ui_event_callback(&callback);
 
             /* Accumulated customized ISE callbacks, depending on the input modes */
             for (scluint loop = 0;loop < _language_manager.get_languages_num();loop++) {
@@ -656,37 +1140,46 @@ ise_create()
                     for (scluint inner_loop = 0;inner_loop < language->input_modes.size();inner_loop++) {
                         INPUT_MODE_INFO &info = language->input_modes.at(inner_loop);
                         LOGD("Registering callback for input mode %s : %p\n", info.name.c_str(), language->callback);
-                        gSCLUI->set_ui_event_callback(language->callback, info.name.c_str());
+                        g_ui->set_ui_event_callback(language->callback, info.name.c_str());
                     }
                 }
             }
 
             read_ise_config_values();
             _language_manager.set_enabled_languages(g_config_values.enabled_languages);
-
             _language_manager.select_language(g_config_values.selected_language.c_str());
+            vconf_set_bool (VCONFKEY_AUTOCAPITAL_ALLOW_BOOL, g_config_values.auto_capitalise);
+            vconf_set_bool (VCONFKEY_AUTOPERIOD_ALLOW_BOOL, g_config_values.auto_punctuate);
+            g_ui->enable_sound (g_config_values.sound_on);
+            g_ui->enable_vibration (g_config_values.vibration_on);
+            g_ui->enable_magnifier (g_config_values.preview_on);
         }
 
-        SclSize size_portrait = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_PORTRAIT);
-        SclSize size_landscape = gSCLUI->get_input_mode_size(gSCLUI->get_input_mode(), DISPLAYMODE_LANDSCAPE);
-        g_ise_common->set_keyboard_size_hints(size_portrait, size_landscape);
+        SclSize size_portrait = g_ui->get_input_mode_size(g_ui->get_input_mode(), DISPLAYMODE_PORTRAIT);
+        SclSize size_landscape = g_ui->get_input_mode_size(g_ui->get_input_mode(), DISPLAYMODE_LANDSCAPE);
+        g_core.set_keyboard_size_hints(size_portrait, size_landscape);
     }
+    init_recent_used_punctuation();
+    g_core.enable_soft_candidate (false);
 }
 
 void
 ise_destroy()
 {
-    if (gSCLUI) {
-        LOGD("calling gSCLUI->fini()");
-        gSCLUI->fini();
-        LOGD("deleting gSCLUI");
-        delete gSCLUI;
-        gSCLUI = NULL;
+    if (g_ui) {
+        LOGD("calling g_ui->fini()");
+        g_ui->fini();
+        LOGD("deleting g_ui");
+        delete g_ui;
+        g_ui = NULL;
     }
     if (g_candidate) {
         delete g_candidate;
         g_candidate = NULL;
     }
+
+    /* This is necessary. If this is not called, 3rd party IME might have auto period input regardless its settings */
+    vconf_set_bool (VCONFKEY_AUTOPERIOD_ALLOW_BOOL, false);
 }
 
 // when it is the time to auto_cap, the
@@ -714,7 +1207,7 @@ ise_destroy()
 // if we want to input [How Are you.]
 // Note the "Are" is not use auto-capital rule.
 // we should use:
-//    ise_send_event(MVK_Shift_On, scim::SCIM_KEY_NullMask);
+//    ise_send_event(MVK_Shift_On, SclCoreKeyMask_Null);
 // when we are want to input "A"
 // following input still has the auto_cap rule.
 void
@@ -732,7 +1225,7 @@ ise_set_caps_mode(unsigned int mode)
             if (info->accepts_caps_mode) {
                 set_caps_mode(g_keyboard_state.caps_mode);
             } else {
-                gSCLUI->set_shift_state(SCL_SHIFT_STATE_OFF);
+                g_ui->set_shift_state(SCL_SHIFT_STATE_OFF);
             }
         }
     }
@@ -741,12 +1234,14 @@ ise_set_caps_mode(unsigned int mode)
 void
 ise_update_cursor_position(int position)
 {
-    if (gSCLUI) {
+    if (g_ui) {
+#ifndef _TV
         if (position > 0) {
-            gSCLUI->set_string_substitution("www.", ".com");
+            g_ui->set_string_substitution("www.", ".com");
         } else {
-            gSCLUI->unset_string_substitution("www.");
+            g_ui->unset_string_substitution("www.");
         }
+#endif
     }
 }
 
@@ -786,19 +1281,19 @@ void ise_set_return_key_type(unsigned int type)
     }
 
     if (type == ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DEFAULT) {
-        gSCLUI->unset_private_key("Enter");
+        g_ui->unset_private_key("Enter");
     } else {
         static sclchar *imagelabel[SCL_BUTTON_STATE_MAX] = {
            const_cast<sclchar*>(" "), const_cast<sclchar*>(" "), const_cast<sclchar*>(" ")
         };
 
-        gSCLUI->set_private_key("Enter", buf, imagelabel, NULL, 0, const_cast<sclchar*>("Enter"), TRUE);
+        g_ui->set_private_key("Enter", buf, imagelabel, NULL, 0, const_cast<sclchar*>("Enter"), TRUE);
     }
 }
 
 void ise_set_return_key_disable(unsigned int disabled)
 {
-    gSCLUI->enable_button("Enter", !disabled);
+    g_ui->enable_button("Enter", !disabled);
 }
 
 void ise_get_language_locale(char **locale)
@@ -815,5 +1310,68 @@ void ise_update_table(const vector<string> &vec_str)
 {
     if (g_candidate) {
         g_candidate->update(vec_str);
+    }
+}
+
+void ise_process_key_event(scim::KeyEvent& key, sclu32 &ret)
+{
+    ret = 0;
+    if (g_ui) {
+        ret = g_ui->process_key_event(key.get_key_string().c_str());
+    }
+}
+
+static void init_recent_used_punctuation()
+{
+    if(g_recent_used_punctuation.empty())
+    {
+        g_recent_used_punctuation.push_back("#");
+        g_recent_used_punctuation.push_back("$");
+        g_recent_used_punctuation.push_back("%");
+        g_recent_used_punctuation.push_back("^");
+        g_recent_used_punctuation.push_back("&");
+    }
+
+}
+
+static void update_recent_used_punctuation(const char * key_value)
+{
+    if(NULL == key_value)
+    {
+        return;
+    }
+    for(int i=0; i<10; ++i)
+    {
+        char buf[5] = {0};
+        snprintf(buf, sizeof(buf), "%d", i);
+        if(strcmp(key_value, buf) == 0)
+        {
+            return;
+        }
+    }
+    string strKey = string(key_value);
+    for(int i=0; i<MAX_DEFAULT_PUNCTUATION; ++i)
+    {
+        if(0 == strKey.compare(g_default_punctuation[i].c_str()))
+        {
+            return;
+        }
+    }
+    vector<string>::iterator iter = g_recent_used_punctuation.begin();
+    for(; iter!=g_recent_used_punctuation.end(); ++iter)
+    {
+        if(0 == strKey.compare(iter->c_str()))
+        {
+            break;
+        }
+    }
+    if(iter != g_recent_used_punctuation.end())
+    {
+        g_recent_used_punctuation.erase(iter);
+    }
+    g_recent_used_punctuation.push_back(strKey);
+    if(g_recent_used_punctuation.size() > MAX_DEFAULT_PUNCTUATION-1)
+    {
+        g_recent_used_punctuation.erase(g_recent_used_punctuation.begin());
     }
 }

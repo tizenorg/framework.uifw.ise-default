@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Акылдуу киргизүү функциялары"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Авто чоң тамга коюу"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Кайра коюу"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Qwertу ариптактасы"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Ар сүйлөмдүн биринчи тамгасын автоматтык түрдө чоңойтуу."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Бүттү"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Колдоого алынган тилдердин саны (%d) нары четине жетти."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Next"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 клавиатурасы"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Дирилдөө"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Добуш"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Select input languages"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Белгини алдын ала көрүү"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Авто пунктуация"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Баскыч-таптоо кайтарым жообу"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Жазуу тилдери"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Кирүү"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Жөнөтүү"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Search"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Log in"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Кошулуу"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Go"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "You must select at least one language in keyboard settings."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "QWERTY клавиатурасында баскычты басканда чоң белгисин көрсөтүү."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "T9 Режими"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Ариптакта түрү"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Клавиатура орнотуулары"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Орун баскычын эки ирет басуу менен чекитти автоматтык түрдө киргизиңиз"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Көңүл буруңуз"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ОК"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Артка"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Дагы орнотуулар"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Keypad settings will be reset. Continue?"
+

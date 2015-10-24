@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Функцыі смарт-уводу"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Аўтавыкар. вялікіх літар"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Скінуць"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Клавіятура Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Аўтаматычна пісаць першае слова кожнага сказа з вялікай літары."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Гат."
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Дасягнуты максімум моў, якія падтрымліваюцца (%d)."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Next"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Клавіятура 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Вібрацыя"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Гук"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Select input languages"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Перадпрагляд сімвалаў"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Аўтаматычная пунктуацыя"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Зварот.сувязь націску кнопкі"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Мовы ўводу"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Уваход"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Адправ."
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Search"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Log in"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Далуч."
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Go"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "You must select at least one language in keyboard settings."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Паказваць вялікае акно сімвала пры націсканні клавішы на клавіятуры Qwerty."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Прагназаванне тэксту"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Тып клавіятуры"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Налады клавіятуры"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Аўтаматычна ставіць кропку, двойчы націснуўшы на клавішу прабелу."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Увага"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ОК"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Скасаваць"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Іншыя налады"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Налады клавіятуры будуць скінуты. Працягваць?"
+

@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Funksionet e futjes inteligjente"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Shkronjë e madhe auto"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Ricilëso"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Tastiera Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Bëje automatikisht të madhe shkronjën e parë të çdo fjalie."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Kryer"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "U arrit numri maksimal i gjuhëve të mbështetura (%d)."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Vijim"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Tastiera 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Dridhje"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Tingull"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Përzgjidh gjuhët e hyrjes"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Parapamje e karakterit"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Pikësim auto"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Feedback-u i tast-trokitjes"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Gjuhët e futjes së shkrimit"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Lidhu"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Dërgo"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Kërko"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Lidhu"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Futu"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Shko"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Duhet të përzgjedhësh së paku një gjuhë në cilësimet e tastierës."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Shfaq një flluskë të madhe të shenjës kur trokitet një tast në një tastierë QWERTY."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Mënyra parashikuese"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Lloji i tastierës"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Percaktimet e opsioneve te butonave"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Fut automatikisht një pikë duke prekur dy herë shiritin e hapësirës."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Kujdes"
+
+msgid "IDS_ST_SK_OK"
+msgstr "Ok"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Anullo"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Cil. tjera"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Cilësimet e tastierës do të rivendosen. Të vazhdohet?"
+

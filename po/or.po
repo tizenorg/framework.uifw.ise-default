@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "ସ୍ମାର୍ଟ୍ ଇନପୁଟ୍ କାର୍ଯ୍ୟକଳାପଗୁଡିକ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ସ୍ଵତଃ କ୍ୟାପିଟାଲାଇଜ୍"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "ପୁନଃସେଟ୍"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "କ୍ୱେର୍ଟି କୀବୋର୍ଡ"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ପ୍ରତ୍ୟେକ ବାକ୍ୟର ପ୍ରଥମ ଅକ୍ଷର ସ୍ୱତଃସ୍ପୃତ ଭାବେ ବଡ ହେବ।"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ସମାପ୍ତ"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "ସର୍ବାଧିକ ସଂଖ୍ୟକ ସମର୍ଥିତ ଭାଷାଗୁଡିକରେ (%d) ପହଞ୍ଚିଛି।"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ପରବର୍ତ୍ତୀ"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 କୀବୋର୍ଡ୍"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "କମ୍ପନ"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ଧ୍ଵନି"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ଇନପୁଟ୍ ଭାଷାଗୁଡିକ ଚୟନ"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ବର୍ଣ୍ଣ ପୂର୍ବାବଲୋକନ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ସ୍ଵତଃ ପୁର୍ଣ୍ଣଛେଦ"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "କୀ-ଟ୍ୟାପ୍ ମତାମତ"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ଇନପୁଟ୍ ଭାଷାଗୁଡିକ"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ସାଇନ୍ ଇନ୍"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ପଠାନ୍ତୁ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ସନ୍ଧାନ"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ଲଗ୍ ଇନ୍"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ଯୋଗଦାନ"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "ଯାଆନ୍ତୁ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "କୀବୋର୍ଡ୍ ସେଟିଂସମୂହରେ ଆପଣ ନିଶ୍ଚିତଭାବରେ ଅତିକମ୍‌ରେ ଏକ ଭାଷା ଚୟନ କରିବେ।"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "ଏକ କ୍ୱେର୍ଟି କୀବୋର୍ଡ୍ କୀ ଟ୍ୟାପ୍ ହୋଇଥିବା ବେଳେ ଏକ ବଡ ଅକ୍ଷର ଯୁକ୍ତ ବବଲ୍ ଦେଖାନ୍ତୁ।"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "ପୂର୍ବାନୁମାନ ଟେକ୍ସଟ୍‌"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "କୀବୋର୍ଡ୍ ପ୍ରକାର"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "କୀବୋର୍ଡ୍ ସେଟିଂସ୍"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "ସ୍ପେସ୍ ଦଣ୍ଡିକା ଦୁଇଥର ଟ୍ୟାପ୍ କରି ଏକ ପୂର୍ଣ୍ଣ ଛେଦ ସ୍ଵତଃ ସନ୍ନିବେଶ କରନ୍ତୁ।"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ସତର୍କତା"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ଓକେ"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "ବାତିଲ୍"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "ଅଧିକ ସେଟିଂସ୍"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "କୀପ୍ୟାଡ୍ ସେଟିଂସମୂହ ପୁନଃସେଟ୍ ହେବ । ଜାରି ରଖିବେ?"
+

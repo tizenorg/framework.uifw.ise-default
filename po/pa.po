@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "ਸਮਾਰਟ ਇਨਪੁਟ ਫੰਕਸ਼ਨਸ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ਸਵੈ ਵੱਡਾ ਕਰੋ"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "ਰੀਸੈੱਟ"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ਕਵੇਰਟੀ ਕੀਬੋਰਡ"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ਹਰ ਇੱਕ ਵਾਕ ਦੇ ਪਹਿਲੇ ਅੱਖਰ ਨੂੰ ਸਵੈਚਲਿਤ ਵੱਡਾ ਕਰ ਦਿਉ।"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ਪੂਰਨ"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "ਸਮਰਥਿਤ ਭਾਸ਼ਾਵਾਂ ਅਧਿਕਤਮ ਸੰਖਿਆ (%d) ਤੇ ਪਹੁੰਚੀਆਂ।"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ਅੱਗੇ"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 ਕੀਬੋਰਡ"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "ਵਾਈਬ੍ਰੇਸ਼ਨ"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ਧੁਨੀ"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ਇਨਪੁਟ ਭਾਸ਼ਾਵਾਂ ਨੂੰ ਚੁਣੋ"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ਵਰਣ ਪੂਰਵ-ਦਰਸ਼ਨ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ਸਵੈ ਵਿਰਾਮ ਚਿੰਨ੍ਹ ਲਗਾਉ"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "ਕੀ-ਟੈਪ ਫੀਡਬੈਕ"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ਇਨਪੁਟ ਭਾਸ਼ਾਵਾਂ"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ਸਾਈਨ ਇਨ ਕਰੋ"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ਭੇਜੋ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ਖੋਜੋ"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ਲੌਗ-ਇਨ ਕਰੋ"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ਸ਼ਾਮਿਲ"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "ਜਾਉ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "ਤੁਹਾਨੂੰ ਕੀਬੋਰਡ ਸੈੱਟਿੰਗਸ ਵਿੱਚ ਘੱਟ ਤੋਂ ਘੱਟ ਇੱਕ ਭਾਸ਼ਾ ਦਾ ਚੋਣ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ।"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "ਜਦੋਂ ਕਵੇਰਟੀ ਕੀਬੋਰਡ ਤੇ ਇੱਕ ਬਟਨ ਟੈਪ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਤਾਂ ਇੱਕ ਵੱਡਾ ਵਰਣ ਬੱਬਲ ਦਿਖਾਉ।"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "ਪੂਰਵ ਅਨੁਮਾਨਿਤ ਟੈਕਸਟ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "ਕੀਬੋਰਡ ਪ੍ਰਕਾਰ"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "ਕੀਬੋਰਡ ਸੈੱਟਿੰਗਸ"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "ਸਪੇਸ ਬਾਰ ਨੂੰ ਦੋ ਵਾਰ ਟੈਪ ਕਰਕੇ ਡੰਡੀ ਸਵੈਚਲਿਤ ਸੰਮਿਲਤ ਕਰੋ।"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ਧਿਆਨ ਦਿਉ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ਓਕੇ"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "ਰੱਦ ਕਰੋ"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "ਹੋਰ ਸੈੱਟਿੰਗਸ"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "ਕੀਪੈਡ ਸੈੱਟਿੰਗਸ ਰੀਸੈੱਟ ਹੋ ਜਾਣਗੀਆਂ। ਜਾਰੀ ਰੱਖੀਏ?"
+

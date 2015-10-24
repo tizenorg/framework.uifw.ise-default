@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "ಸ್ಮಾರ್ಟ್ ಇನ್‌ಪುಟ್ ಕಾರ್ಯಗಳು"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ಸ್ವಯಂ ಕ್ಯಾಪಿಟಲೈಸ್"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "ಮರುಹೊಂದಿಸು"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ಕ್ವೆರ್ಟಿ ಕೋಬೋರ್ಡ್"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ಪ್ರತಿ ವಾಕ್ಯದ ಮೊದಲ ಅಕ್ಷರವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ದೊಡ್ಡ ಅಕ್ಷರವನ್ನಾಗಿಸಿ."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ಮುಗಿದಿದೆ"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "ಬೆಂಬಲಿತ ಭಾಷೆಗಳ ಗರಿಷ್ಟ ಸಂಖ್ಯೆ (%d) ತಲುಪಿದೆ."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ನಂತರ"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 ಕೀಬೋರ್ಡ್"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "ಕಂಪನ"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ಶಬ್ದ"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ಒಳನೀಡಿಕೆಯ ಭಾಷೆಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ಅಕ್ಷರ ಪೂರ್ವಾವಲೋಕನ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಚ್ಚರಿಸಿ"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "ಕೀ-ತಟ್ಟುವ ಪ್ರತಿಕ್ರಿಯೆ"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ಇನ್‌ಪುಟ್ ಭಾಷೆಗಳು"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ಸೈನ್ ಇನ್"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ಕಳುಹಿಸಿ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ಶೋಧಿಸಿ"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ಲಾಗ್ ಇನ್"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ಸೇರಿಕೊಳ್ಳಿ"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "ಹೋಗಿ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "ನೀವು ಕೀಬೋರ್ಡ್ ಸಂಯೋಜನೆಗಳಲ್ಲಿ ಕನಿಷ್ಟ ಒಂದು ಭಾಷೆ ಆಯ್ಕೆಮಾಡಬೇಕು."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "ಕ್ವೆರ್ಟಿ ಕೀಬೋರ್ಡ್ ಮೇಲಿನ ಕೀಯನ್ನು ಒತ್ತಿದಾಗ ದೊಡ್ಡದಾದ ಅಕ್ಷರಗಳ ಬಬಲ್ ಅನ್ನು ತೋರಿಸಿ."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "ಊಹಾತ್ಮಕ ಪಠ್ಯ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "ಕೀಬೋರ್ಡ್ ವಿಧ"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "ಕೀಬೋರ್ಡ್ ಸಂಯೋಜನೆಗಳು"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "ಎರಡು ಬಾರಿ ಸ್ಪೇಸ್ ಬಾರ್ ತಟ್ಟುವಿಕೆ ಮೂಲಕ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪೂರ್ಣ ವಿರಾಮ ಸೇರಿಸಿ."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ಗಮನಿಸಿ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ಸರಿ"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "ರದ್ದು"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "ಮತ್ತಷ್ಟು ಸಂಯೋಜನೆಗಳು"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "ಕೀಪ್ಯಾಡ್ ಸಂಯೋಜನೆಗಳನ್ನು ಮರುಹೊಂದಿಸಲಾಗುವುದು. ಮುಂದುವರಿಯುವುದೆ?"
+

@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Chức năng nhập thông minh"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Tự động viết hoa"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Đặt lại"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Bàn phím Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Tự động viết hoa chữ cái đầu tiên của mỗi câu."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Xong"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Đã đạt đến số ngôn ngữ được hỗ trợ tối đa (%d)."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Tiếp"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Bàn phím 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Rung"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Âm thanh"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Chọn ngôn ngữ nhập"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Xem trước ký tự"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Tự động chấm câu"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Phản hồi chạm phím"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Ngôn ngữ nhập"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Đăng nhập"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Gửi"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Tìm"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Đăng nhập"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Tham dự"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Bắt đầu"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Bạn phải chọn ít nhất một ngôn ngữ trong cài đặt bàn phím."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Hiển thị ký tự lớn khi chạm vào một phím trên bàn phím Qwerty."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Tiên đoán văn bản"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Loại bàn phím"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Cài đặt bàn phím"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Tự động chèn dấu chấm câu bằng cách chạm vào thanh khoảng cách hai lần."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Chú ý"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Thoát"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Nhiều cài đặt hơn"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Cài đặt bàn phím sẽ được đặt lại. Tiếp tục?"
+

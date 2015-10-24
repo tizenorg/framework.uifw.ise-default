@@ -20,6 +20,8 @@
 #include <string>
 #include <assert.h>
 #include <algorithm>
+#include <dlog.h>
+
 using namespace std;
 
 #define CANDIDATE_EDJ_FILE_PATH "/usr/share/isf/ise/ise-default/720x1280/default/sdk/edc/candidate-multiline.edj"
@@ -65,7 +67,7 @@ EflMultiLineCandidate::item_pressed(Evas_Object *item)
     }
 
     //hide_more_view();
-    // notify listners the event happend
+    // notify listeners the event happened
     MultiEventDesc desc;
     desc.type = MultiEventDesc::CANDIDATE_ITEM_MOUSE_DOWN;
     desc.index = index;
@@ -101,7 +103,7 @@ EflMultiLineCandidate::get_candidate_item()
     ret = edje_object_file_set(edje,
         CANDIDATE_EDJ_FILE_PATH, "candidate_item");
     if (!ret) {
-        printf("getting candidate edje failed.\n");
+        LOGW("getting candidate edje failed.");
         return NULL;
     }
 
@@ -281,7 +283,7 @@ _get_seperate_line(Evas_Object *win) {
     edje = edje_object_add (evas_object_evas_get (win));
     ret = edje_object_file_set (edje, CANDIDATE_EDJ_FILE_PATH, "seperate_line");
     if (!ret) {
-        printf("getting seperate line failed.\n");
+        LOGW("getting seperate line failed.");
         return NULL;
     }
     evas_object_show (edje);
@@ -296,11 +298,15 @@ EflMultiLineCandidate::make_more_view()
     int ret = edje_object_file_set(more_view.layout,
         CANDIDATE_EDJ_FILE_PATH, "candidate_more_view");
     if (!ret) {
-        printf("error while loading more candidate layout\n");
+        LOGW("error while loading more candidate layout");
         throw "failed loading candidate layout.";
     }
 
-    evas_object_resize(more_view.layout, 720, 444);
+    Evas_Coord scr_w, scr_h;
+
+    elm_win_screen_size_get (m_window, NULL, NULL, &scr_w, &scr_h);
+
+    evas_object_resize(more_view.layout, scr_w, 444);
     evas_object_move(more_view.layout, 0, 86);
     evas_object_show(more_view.layout);
 
@@ -328,11 +334,13 @@ EflMultiLineCandidate::make_view()
     int ret = edje_object_file_set(view.layout,
         CANDIDATE_EDJ_FILE_PATH, "candidate");
     if (!ret) {
-        printf("error while loading candidate layout\n");
+        LOGW("error while loading candidate layout");
         throw "failed loading candidate layout.";
     }
+    Evas_Coord scr_w, scr_h;
 
-    evas_object_resize(view.layout, 720, 84);
+    elm_win_screen_size_get (m_window, NULL, NULL, &scr_w, &scr_h);
+    evas_object_resize(view.layout, scr_w, 84);
     evas_object_show(view.layout);
 
     view.table = elm_table_add(m_window);
@@ -403,16 +411,20 @@ EflMultiLineCandidate::update(const vector<string> &vec_str)
 void
 EflMultiLineCandidate::rotate(int degree) {
     m_degree = degree;
+    Evas_Coord scr_w, scr_h;
+
+    elm_win_screen_size_get (m_window, NULL, NULL, &scr_w, &scr_h);
+
     switch (degree) {
         case 0:
         case 180:
-            evas_object_resize(view.layout, 720, 84);
-            evas_object_resize(more_view.layout, 720, 444);
+            evas_object_resize(view.layout, scr_w, 84);
+            evas_object_resize(more_view.layout, scr_w, 444);
             break;
         case 90:
         case 270:
-            evas_object_resize(view.layout, 1280, 84);
-            evas_object_resize(more_view.layout, 1280, 444);
+            evas_object_resize(view.layout, scr_h, 84);
+            evas_object_resize(more_view.layout, scr_h, 444);
             break;
         default:
             break;

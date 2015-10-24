@@ -18,25 +18,29 @@
 #ifndef _ISE_H_
 #define _ISE_H_
 
-#include <scl.h>
-#include <Ecore.h>
-#include <Evas.h>
-#include <Ecore_Evas.h>
-#include <Ecore_IMF.h>
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif  /*  */
-#include <vector>
+#include <sclcore.h>
 #include <string>
+
+#include <Elementary.h>
+
 #include "languages.h"
 
-#define ISE_VERSION "1.0.8-1"
+#define ISE_VERSION "1.1.0-1"
 #define LOCALEDIR "/usr/share/locale"
 
 #define PRIMARY_LATIN_LANGUAGE "English"
-#define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry.xml"
 
-#define DEFAULT_KEYBOARD_ISE_UUID "d75857a5-4148-4745-89e2-1da7ddaf7999"
+#ifdef _TV
+#define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/tv/main_entry.xml"
+#else
+#define MAIN_ENTRY_XML_PATH_480X800    "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry_480x800.xml"
+#define MAIN_ENTRY_XML_PATH_540X960    "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry_540x960.xml"
+#define MAIN_ENTRY_XML_PATH_720X1280   "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry.xml"
+#define MAIN_ENTRY_XML_PATH_1440X2560  "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry_1440x2560.xml"
+#define MAIN_ENTRY_XML_PATH MAIN_ENTRY_XML_PATH_720X1280
+#endif
+
+#define DEFAULT_KEYBOARD_ISE_UUID "org.tizen.ise-engine-default"
 
 //#define INPUT_MODE_NATIVE MAX_INPUT_MODE /* Native mode. It will distinguish to the current user language */
 
@@ -66,6 +70,8 @@ enum ISE_LAYOUT{
     ISE_LAYOUT_STYLE_NUMBERONLY_DEC,
     ISE_LAYOUT_STYLE_NUMBERONLY_SIGDEC,
 
+    ISE_LAYOUT_STYLE_PASSWD_3X4,
+
     ISE_LAYOUT_STYLE_MAX
 };
 
@@ -75,6 +81,30 @@ typedef struct {
     const sclboolean force_latin;
 } ISE_DEFAULT_VALUES;
 
+#ifdef _TV
+const ISE_DEFAULT_VALUES g_ise_default_values[ISE_LAYOUT_STYLE_MAX] = {
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NORMAL */
+    {"SYM_QTY_1",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NUMBER */
+    {"",                "EMAIL",        TRUE },     /* ISE_LAYOUT_STYLE_EMAIL */
+    {"",                "URL",          TRUE },     /* ISE_LAYOUT_STYLE_URL */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_PHONENUMBER */
+    {"NUMONLY_QTY",     "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_IP */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_MONTH */
+    {"NUMONLY_QTY",     "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_INVALID */
+    {"SYM_QTY_1",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_HEX */
+    {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_TERMINAL */
+    {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_PASSWORD */
+    {"NUMONLY_QTY",     "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_DATETIME */
+    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_EMOTICON */
+
+    {"NUMONLY_QTY",     "DEFAULT",   FALSE },       /* ISE_LAYOUT_STYLE_NUMBERONLY_SIG */
+    {"NUMONLY_QTY",     "DEFAULT",   FALSE },       /* ISE_LAYOUT_STYLE_NUMBERONLY_DEC */
+    {"NUMONLY_QTY",     "DEFAULT",   FALSE },       /* ISE_LAYOUT_STYLE_NUMBERONLY_SIGDEC */
+
+    {"NUMONLY_QTY",     "DEFAULT",   FALSE },       /* ISE_LAYOUT_STYLE_PASSWD_3X4 */
+};
+#else
 const ISE_DEFAULT_VALUES g_ise_default_values[ISE_LAYOUT_STYLE_MAX] = {
     {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NORMAL */
     {"SYM_QTY_1",       "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_NUMBER */
@@ -89,21 +119,28 @@ const ISE_DEFAULT_VALUES g_ise_default_values[ISE_LAYOUT_STYLE_MAX] = {
     {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_TERMINAL */
     {"",                "DEFAULT",      TRUE },     /* ISE_LAYOUT_STYLE_PASSWORD */
     {"DATETIME_3X4",    "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_DATETIME */
-    {"",                "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_EMOTICON */
+    {"EMOTICON_LAYOUT", "DEFAULT",      FALSE },    /* ISE_LAYOUT_STYLE_EMOTICON */
 
     {"NUMONLY_3X4_SIG",    "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_SIG */
     {"NUMONLY_3X4_DEC",    "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_DEC */
     {"NUMONLY_3X4_SIGDEC", "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_NUMBERONLY_SIGDEC */
+
+    {"PASSWD_3X4",         "DEFAULT",   FALSE },    /* ISE_LAYOUT_STYLE_PASSWD_3X4 */
 };
+#endif
 
 #define ISE_RETURN_KEY_LABEL_DONE   gettext("IDS_IME_SK_DONE_ABB")
-#define ISE_RETURN_KEY_LABEL_GO     gettext("IDS_IME_OPT_GO_ABB")
-#define ISE_RETURN_KEY_LABEL_JOIN   gettext("IDS_IME_OPT_JOIN_M_SIGN_IN")
-#define ISE_RETURN_KEY_LABEL_LOGIN  gettext("IDS_IME_OPT_LOG_IN_ABB")
-#define ISE_RETURN_KEY_LABEL_NEXT   dgettext("sys_string", "IDS_COM_SK_NEXT")
-#define ISE_RETURN_KEY_LABEL_SEARCH dgettext("sys_string", "IDS_COM_BODY_SEARCH")
-#define ISE_RETURN_KEY_LABEL_SEND   dgettext("sys_string", "IDS_COM_SK_SEND")
-#define ISE_RETURN_KEY_LABEL_SIGNIN dgettext("sys_string", "IDS_COM_HEADER_SIGN_IN")
+#define ISE_RETURN_KEY_LABEL_GO     gettext("IDS_IME_BUTTON_GO_M_KEYBOARD")
+#define ISE_RETURN_KEY_LABEL_JOIN   gettext("IDS_IME_BUTTON_JOIN_M_KEYBOARD")
+#define ISE_RETURN_KEY_LABEL_LOGIN  gettext("IDS_IME_BUTTON_LOG_IN_M_KEYBOARD")
+#define ISE_RETURN_KEY_LABEL_NEXT   gettext("IDS_IME_OPT_NEXT_ABB")
+#define ISE_RETURN_KEY_LABEL_SEARCH gettext("IDS_IME_BUTTON_SEARCH_M_KEYBOARD")
+#define ISE_RETURN_KEY_LABEL_SEND   gettext("IDS_IME_BUTTON_SEND_M_KEYBOARD")
+#define ISE_RETURN_KEY_LABEL_SIGNIN gettext("IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD")
+
+
+#define IMDATA_ACTION_DISABLE_EMOTICONS 0x0040
+
 
 typedef struct {
     int ic;
@@ -114,6 +151,48 @@ typedef struct {
     sclboolean need_reset;
     sclboolean visible_state;
 } KEYBOARD_STATE;
+
+using namespace scl;
+
+class CCoreEventCallback : public ISCLCoreEventCallback
+{
+    void on_init();
+    void on_run(int argc, char **argv);
+    void on_exit();
+
+    void on_attach_input_context(sclint ic, const sclchar *ic_uuid);
+    void on_detach_input_context(sclint ic, const sclchar *ic_uuid);
+
+    void on_focus_out(sclint ic, const sclchar *ic_uuid);
+    void on_focus_in(sclint ic, const sclchar *ic_uuid);
+
+    void on_ise_show(sclint ic, const sclint degree, Ise_Context &context);
+    void on_ise_hide(sclint ic, const sclchar *ic_uuid);
+
+    void on_reset_input_context(sclint ic, const sclchar *uuid);
+
+    void on_set_display_language(const sclchar *language);
+    void on_set_accessibility_state(const sclboolean state);
+    void on_set_rotation_degree(sclint degree);
+
+    void on_set_layout(sclu32 layout);
+    void on_set_caps_mode(sclu32 mode);
+    void on_update_cursor_position(sclint ic, const sclchar *ic_uuid, sclint cursor_pos);
+    void on_update_surrounding_text(sclint ic, const sclchar *text, sclint cursor);
+
+    void on_set_return_key_type(sclu32 type);
+    void on_set_return_key_disable(sclu32 disabled);
+
+    void on_set_imdata(sclchar *buf, sclu32 len);
+    void on_get_language_locale(sclint ic, sclchar **locale);
+    void on_update_lookup_table(SclCandidateTable &table);
+
+    void on_create_option_window(sclwindow window, SCLOptionWindowType type);
+    void on_destroy_option_window(sclwindow window);
+    void on_check_option_window_availability(sclboolean *ret);
+
+    void on_process_key_event(scim::KeyEvent &key, sclu32 *ret);// only for TV profile to handle remote control button
+};
 
 void ise_send_string(const sclchar *key_value);
 void ise_update_preedit_string(const sclchar *str);
@@ -139,5 +218,6 @@ void ise_set_return_key_type(unsigned int type);
 void ise_set_return_key_disable(unsigned int disabled);
 void ise_get_language_locale(char **locale);
 void ise_update_table(const std::vector<std::string> &vec_str);
+void ise_process_key_event(scim::KeyEvent &key, sclu32 &ret);
 
 #endif

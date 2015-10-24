@@ -20,7 +20,9 @@
 
 #include <string>
 #include <vector>
-#include <scl.h>
+#include <sclui.h>
+
+using namespace scl;
 
 enum LANGUAGE_PRIORITY {
     LANGAUGE_PRIORITY_NONE,
@@ -28,11 +30,11 @@ enum LANGUAGE_PRIORITY {
     LANGUAGE_PRIORITY_SPECIALIZED,
 };
 
-struct ILanguageCallback : public scl::ISCLUIEventCallback {
+struct ILanguageCallback : public ISCLUIEventCallback {
     /* Default callback functions inherited from scl::ISCLUIEventCallback */
     /* FIXME scl::SCLEventReturnType */
-    virtual SCLEventReturnType on_event_key_clicked(scl::SclUIEventDesc ui_event_desc) { return SCL_EVENT_PASS_ON; }
-    virtual SCLEventReturnType on_event_drag_state_changed(scl::SclUIEventDesc ui_event_desc) { return SCL_EVENT_PASS_ON; }
+    virtual SCLEventReturnType on_event_key_clicked(SclUIEventDesc ui_event_desc) { return SCL_EVENT_PASS_ON; }
+    virtual SCLEventReturnType on_event_drag_state_changed(SclUIEventDesc ui_event_desc) { return SCL_EVENT_PASS_ON; }
     virtual SCLEventReturnType on_event_notification(SCLUINotiType noti_type, sclint etc_info) { return SCL_EVENT_PASS_ON; }
 
     /* Additional callback function, which is called when this language is selected */
@@ -113,6 +115,7 @@ public:
 
     LANGUAGE_INFO* get_current_language_info();
     const sclchar* get_resource_file_path();
+    bool set_resource_file_path(const char * resource_file);
 private:
     /* enable languages, if languages num is 0, return false */
     sclboolean enable_languages(const std::vector<std::string> &languages);

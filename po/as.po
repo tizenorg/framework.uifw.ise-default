@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "স্মাৰ্ট ইনপুট ফাংচনসমূহ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "স্বয়ং বৰফলাকৰণ"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "পুনঃছেট"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "কুৱেৰ্টি কীব'র্ড"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "প্ৰতিটো বাক্যৰ প্ৰথম আখৰটো স্বয়ংক্ৰিয়ভাৱে বৰফলা কৰক৷"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ঠিক"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "সৰ্বাধিক সংখ্যক সমৰ্থিত ভাষা (%d) উপনীত হৈছে৷"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "পৰৱৰ্তী"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 কীব'ৰ্ড"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "ভাইব্ৰেশ্বন"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ধ্বনি"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ইনপুট ভাষা চয়ন কৰক"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "বৰ্ণ পূৰ্বলোকন"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "স্বয়ং চিহ্ন দিয়া"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "কী-টেপ ফীডবেক"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ভাষা ইনপুট"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ছাইন ইন"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "প্ৰেৰণ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "সন্ধান"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ল'গ ইন কৰক"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "যোগদান"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "যাওক"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "কীবোর্ড সেটিংসে আপনাকে অবশ্যই কমপক্ষে একটি ভাষা নির্বাচন করতে হবে৷"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "কুৱেৰ্টি কীব'র্ডত কী এটা টিপাৰ সময়ত ডাঙৰ বৰ্ণ বাবুল দেখুৱাওক৷"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "পূৰ্বানুমান পাঠ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "কীব'ৰ্ডৰ প্ৰকাৰ"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "কীব'ৰ্ড ছেটিংছ"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "স্পেচ দণ্ডিকা দুবাৰ দবাই স্বয়ংক্ৰিয়ভাৱে পূৰ্ণ বিৰতি আন্তঃসংযোগ কৰক৷"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "মনোযোগ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ঠিক"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "বাতিল কৰক"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "অধিক ছেটিংছ"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "কীপেড ছেটিংছ পুনঃছেট কৰিব লাগিব৷ জাৰী ৰাখিবনে?"
+

@@ -15,7 +15,7 @@
  *
  */
 
-#include <scl.h>
+#include <sclcommon.h>
 #include <stdio.h>
 #include <algorithm>
 #include <assert.h>
@@ -377,6 +377,15 @@ const sclchar* ISELanguageManager::get_current_language()
 const sclchar* ISELanguageManager::get_resource_file_path()
 {
     return _default_resource_file.c_str();
+}
+
+bool ISELanguageManager::set_resource_file_path(const char *resource_file)
+{
+    if (NULL == resource_file) {
+        return false;
+    }
+    _default_resource_file = resource_file;
+    return true;
 }
 
 scluint ISELanguageManager::get_languages_num()

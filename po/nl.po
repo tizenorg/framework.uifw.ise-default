@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Slimme invoegfuncties"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Automatisch hoofdletters"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Resetten"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "QWERTY-toetsenbord"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Plaats automatisch een hoofdletter aan het begin van elke zin."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Klaar"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Maximumaantal ondersteunde talen (%d) bereikt."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Volg."
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 toetsenbord"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Trillen"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Geluid"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Invoertalen selecteren"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Pop-up bij toetsaanslag"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Automatische interpunctie"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Feedback toetstik"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Invoertalen"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Log in"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Verzend"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Zoeken"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Log in"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Deeln."
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Ga"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Selecteer ten minste één taal in de toetsenbordinstellingen."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Geef een grote tekstballon weer wanneer op een toets op een QWERTY-toetsenbord wordt getikt."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Voorspellende tekst"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Toetsenbordtype"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Toetsenbordinstellingen"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Voeg automatisch een punt in door tweemaal op de spatiebalk te tikken."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Let op"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Annuleer"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Meer instellingen"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Toetsenblokinstellingen worden hersteld. Doorgaan?"
+

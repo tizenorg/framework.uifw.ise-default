@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "સ્માર્ટ ઇનપુટ ફંક્શંસ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "સ્વત: અક્ષર મોટા કરવા"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "રીસેટ કરો"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ક્વેર્ટી કીબોર્ડ"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "દરેક વાક્યનો પ્રથમ અક્ષર સ્વયંસંચાલિતપણે કેપિટલ કરો."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "પૂર્ણ"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "સમર્થિત ભાષાની મહત્તમ સંખ્યા (%d) પર પહોંચી ગયા."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "પછીનું"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 કીબોર્ડ"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "કંપન"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ધ્વનિ"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ઇનપુટ ભાષા પસંદ કરો"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "વર્ણ પૂર્વદર્શન"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "સ્વતઃ વિરામ"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "કી-ટેપ પ્રતિસાદ"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ઇનપુટ ભાષા"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "સાઇન ઇન કરો"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "મોકલો"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "શોધો"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "લોગ ઇન કરો"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "જોડાઓ"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "જાઓ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "તમારે કીબોર્ડ સેટિંગ્સમાં ઓછામાં ઓછી એક ભાષા પસંદ કરવી પડશે"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "જ્યારે ક્વેર્ટી કીબોર્ડ પરની કી ટેપ કરેલી હોય ત્યારે મોટા વર્ણ બબલ બતાવો."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "આગાહી ટેક્સ્ટ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "કીબોર્ડ પ્રકાર"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "કીબોર્ડ સેટિંગ્સ"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "સ્પેસ બાર બેવાર ટેપ કરીને સ્વચાલિત રીતે એક ફુલ સ્ટોપ સામેલ કરો."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "સાવધાન"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ઓકે"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "રદ કરો"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "વધુ સેટિંગ્સ"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "કીપેડ સેટિંગ્સ રીસેટ કરવામાં આવશે. ચાલુ રાખીએ?"
+

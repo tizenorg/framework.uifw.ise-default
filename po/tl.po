@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Mga function ng Smart input"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Awto capitalize"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "I-reset"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "QWERTY keyboard"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Awtomatikong palakihin ang unang titik ng bawat pangungusap."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Tapos"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Naabot ang maximum na bilang ng sinusuportahan na bilang ng mga wika (%d)."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Next"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 keyboard"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Pag-vibrate"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Tunog"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Pumili ng wika sa input"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Preview ng character"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Awto punctuate"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Feedback sa pag-tap ng key"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Mga wika ng input"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Sign in"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Ipadala"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Hanapin"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Log in"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Sumali"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Pumunta"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Dapat na pumili ka ng kahit isang wika sa mga setting ng keyboard."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Magpakita ng bubble ng malaking character kapag na-tap ang isang key sa isang QWERTY na keyboard."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Predictive text"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Uri ng keyboard"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Mga setting ng keyboard"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Awtomatikong magpasok ng full stop sa pamamagitan ng pag-tap sa space bar nang dalawang beses."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Atensyon"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Ikansela"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Higit pang mga setting"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Mare-reset ang mga setting ng keypad. Magpatuloy?"
+

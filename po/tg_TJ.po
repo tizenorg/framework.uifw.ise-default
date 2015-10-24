@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Функсияҳои вуруди зеҳнӣ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Калонкунии худкор"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Барқарор кардан"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Клавиатураи стандартӣ"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Ҳарфи аввали ҳар як ҷумла худкор калон карда шавад."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Иҷро шуд"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Ба шумораи максималии забонҳои дастгиришаванда (%d) расидед."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Next"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Клавиатураи 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Ларзиш"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Садо"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Select input languages"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Пешнамоиши аломат"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Китобати худкор"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Ақидаи тугма-зарба"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Забонҳои вуруд"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Ворид шудан"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Ирсол"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Ҷустуҷӯ"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Врдшв"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Ҳам. ш."
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Гузариш"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Шумо бояд дар танзимоти клавиатура ақаллан як забонро интихоб кунед."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Нишон додани ҳубоб бо ҳарфи калон ҳангоми зарба задани тугма дар клавиатураи Qwerty."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Матни пешгӯишуда"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Навъи клавиатура"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Танзимоти клавиатура"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Ба тариқи худкор дарҷ кардани нуқта ба тариқи ду маротиба зарба задани тугмаи фосила."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Таваҷҷӯҳ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Бекор кардан"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Танзимоти бештар"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Танзимоти клавиатура барқарор карда мешавад. Идома медиҳед?"
+

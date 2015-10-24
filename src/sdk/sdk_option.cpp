@@ -15,15 +15,19 @@
  *
  */
 
+#include <Evas.h>
 #include <dlog.h>
+#include <vector>
 #undef LOG_TAG
 #define LOG_TAG "ISE_DEFAULT"
 #include "sdk.h"
 #include "option.h"
 #include "ise_lang_table.h"
-using namespace scl;
 
+#ifdef SETUP_MODULE
 static ISELanguageManager _language_manager;
+#endif // SETUP_MODULE
+
 /*
  * This class customizes option windows based on languages
  * So you should perform desired tasks in this class.
@@ -69,8 +73,6 @@ public :
     void on_destroy_option_main_view();
 };
 
-static CSDKOption ise_option_instance;
-
 void CSDKOption::on_create_option_main_view(Evas_Object *genlist, Evas_Object *naviframe)
 {
 
@@ -80,3 +82,5 @@ void CSDKOption::on_destroy_option_main_view()
 {
 
 }
+
+static CSDKOption ise_option_instance;

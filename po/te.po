@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "స్మార్ట్ ఇన్‌పుట్ విధులు"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "స్వీయంగా క్యాపిటలైజ్ చేయి"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "రీసెట్ చేయి"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "క్వర్టీ కీబోర్డ్"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ప్రతి వాక్యం యొక్క మొదటి అక్షరాన్ని స్వయంచాలకంగా క్యాపిటలైజ్ చేస్తుంది."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "పూర్తయిం."
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "మద్దతు గల గరిష్ట భాషల సంఖ్యకు (%d) చేరుకున్నారు."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "తరువాత"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 కీబోర్డ్"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "వైబ్రేషన్"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ధ్వని"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ఇన్‌పుట్ భాషలను ఎంచుకోండి"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "అక్షరం ప్రివ్యూ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "స్వీయ విరామ చిహ్నాన్ని ఉంచు"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "కీ-ట్యాప్ స్పందన"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ఇన్పుట్‌ భాషలు"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "సైన్ ఇన్"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "పంపండి"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "శోధన"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "లాగ్ ఇ."
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "చేరండి"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "వెళ్లు"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "మీరు కీబోర్డ్ సెట్టింగులలో కనీసం ఒక భాష ఎంచుకోవాలి."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "క్వర్టీ కీబోర్డ్‌పై కీని నొక్కినప్పుడు పెద్ద అక్షరం బబుల్‌ను చూపు."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "భవిష్యత్ టెక్స్ట్"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "కీబోర్డు రకం"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "కీబోర్డు సెట్టింగులు"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "స్పేస్ బార్‌ను రెండు సార్లు నొక్కడం ద్వారా ఆటోమేటిక్‌గా ఒక ఫుల్ స్టాఫ్ చొప్పించబడుతుంది."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "అటెన్షన్"
+
+msgid "IDS_ST_SK_OK"
+msgstr "సరే"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "రద్దు"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "మరిన్ని సెట్టింగులు"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "కీప్యాడ్ సెట్టింగులు రీసెట్ చేయబడుతాయి. కొనసాగాలా?"
+

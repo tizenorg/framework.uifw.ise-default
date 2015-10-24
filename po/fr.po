@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Fonctions de saisie intelligente"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Majuscules automatiques"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Réinitialiser"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Clavier Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Mettre automatiquement en majuscules la première lettre de chaque phrase."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "OK"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Nombre maximum de langues prises en charge (%d) atteint"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Suiv."
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Clavier 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Vibreur"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Son"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Sélect. langue de saisie"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Aperçu du caractère"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Ponctuation automatique"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Retour touches"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Langues de saisie"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Connex."
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Envoyer"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Recher."
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Connex."
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Rejoin."
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Aller"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Vous devez sélectionner au moins une langue dans les paramètres du clavier."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Afficher une bulle de caractère agrandie lorsque vous appuyez sur une touche du clavier AZERTY."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Texte intuitif"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Type de clavier"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Paramètres du clavier"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Insérer automatiquement un point en appuyant deux fois sur la barre d'espace."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Attention"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Annuler"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Paramètres supp."
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Les paramètres du clavier seront réinitialisés. Continuer ?"
+

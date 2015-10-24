@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout width="720" height="444" key_width="226" key_height="100" key_spacing="8" row_spacing="8" hit_left="4" hit_right="4" hit_top="4" hit_bottom="4" label_type="3X4_MONTH" vibe_style="DEFAULT" sound_style="DEFAULT">
+<layout width="720" height="442" key_width="227" key_height="95" key_spacing="8" row_spacing="7" hit_left="4" hit_right="4" hit_top="3" hit_bottom="4" label_type="3X4_MONTH" vibe_style="DEFAULT" sound_style="DEFAULT">
   <image_path>
     <button_normal>B09_panel.png</button_normal>
   </image_path>
@@ -8,36 +8,40 @@
     <rec button="pressed">button/B09_key_btn_press.png</rec>
     <rec button="disabled">button/B09_key_btn_01.png</rec>
   </background_image>
-  <row x="8" y="12">
-    <key key_type="string">
+  <row x="12" y="13">
+    <key key_type="string" hit_left="12" hit_top="13">
       <label>
-        <rec> 1 Jan</rec>
+        <rec>1            </rec>
+        <rec multi="1">      JAN</rec>
       </label>
       <key_value>
         <rec>1</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_top="13">
       <label>
-        <rec> 2 Feb</rec>
+        <rec>2            </rec>
+        <rec multi="1">      FEB</rec>
       </label>
       <key_value>
         <rec>2</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_right="12" hit_top="13">
       <label>
-        <rec> 3 Mar</rec>
+        <rec>3            </rec>
+        <rec multi="1">      MAR</rec>
       </label>
       <key_value>
         <rec>3</rec>
       </key_value>
     </key>
   </row>
-  <row x="8">
-    <key key_type="string">
+  <row x="12">
+    <key key_type="string" hit_left="12">
       <label>
-        <rec> 4 Apr</rec>
+        <rec>4            </rec>
+        <rec multi="1">      APR</rec>
       </label>
       <key_value>
         <rec>4</rec>
@@ -45,25 +49,28 @@
     </key>
     <key key_type="string">
       <label>
-        <rec> 5 May</rec>
+        <rec>5            </rec>
+        <rec multi="1">      MAY</rec>
       </label>
       <key_value>
         <rec>5</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_right="12">
       <label>
-        <rec> 6 Jun</rec>
+        <rec>6            </rec>
+        <rec multi="1">      JUN</rec>
       </label>
       <key_value>
         <rec>6</rec>
       </key_value>
     </key>
   </row>
-  <row x="8">
-    <key key_type="string">
+  <row x="12">
+    <key key_type="string" hit_left="12">
       <label>
-        <rec> 7 Jul</rec>
+        <rec>7            </rec>
+        <rec multi="1">      JUL</rec>
       </label>
       <key_value>
         <rec>7</rec>
@@ -71,41 +78,46 @@
     </key>
     <key key_type="string">
       <label>
-        <rec> 8 Aug</rec>
+        <rec>8            </rec>
+        <rec multi="1">      AUG</rec>
       </label>
       <key_value>
         <rec>8</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_right="12">
       <label>
-        <rec> 9 Sep</rec>
+        <rec>9            </rec>
+        <rec multi="1">      SEP</rec>
       </label>
       <key_value>
         <rec>9</rec>
       </key_value>
     </key>
   </row>
-  <row x="8">
-    <key key_type="string">
+  <row x="12">
+    <key key_type="string" hit_left="12" hit_bottom="27">
       <label>
-        <rec>10 Oct</rec>
+        <rec>10            </rec>
+        <rec multi="1">     OCT</rec>
       </label>
       <key_value>
         <rec>10</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_bottom="27">
       <label>
-        <rec>11 Nov</rec>
+        <rec>11            </rec>
+        <rec multi="1">     NOV</rec>
       </label>
       <key_value>
         <rec>11</rec>
       </key_value>
     </key>
-    <key key_type="string">
+    <key key_type="string" hit_right="12" hit_bottom="27">
       <label>
-        <rec>12 Dec</rec>
+        <rec>12            </rec>
+        <rec multi="1">     DEC</rec>
       </label>
       <key_value>
         <rec>12</rec>

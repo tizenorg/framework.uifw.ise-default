@@ -1,6 +1,6 @@
 Name:       ise-default
 Summary:    Tizen keyboard
-Version:    1.0.8
+Version:    1.1.18
 Release:    1
 Group:      Graphics & UI Framework/Input
 License:    Apache-2.0
@@ -11,16 +11,14 @@ BuildRequires:  gettext-tools
 BuildRequires:  edje-bin
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  pkgconfig(isf)
 BuildRequires:  pkgconfig(vconf)
-BuildRequires:  pkgconfig(aul)
 BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(libscl-ui)
+BuildRequires:  pkgconfig(libscl-core)
 BuildRequires:  pkgconfig(ecore-imf)
 BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(efl-assist)
+BuildRequires:  pkgconfig(efl-extension)
 
 
 
@@ -38,7 +36,24 @@ export CFLAGS+=" -DTIZEN_DEBUG_ENABLE"
 export CXXFLAGS+=" -DTIZEN_DEBUG_ENABLE"
 export FFLAGS+=" -DTIZEN_DEBUG_ENABLE"
 
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%if "%{?tizen_profile_name}" == "tv"
+CFLAGS+=" -D_TV";
+CXXFLAGS+=" -D_TV";
+%endif
+
+%if "%{?tizen_profile_name}" == "mobile"
+CFLAGS+=" -D_MOBILE";
+CXXFLAGS+=" -D_MOBILE";
+%endif
+
+%if "%{?tizen_profile_name}" == "wearable"
+CFLAGS+=" -D_WEARABLE";
+CXXFLAGS+=" -D_WEARABLE";
+%endif
+
+rm -rf CMakeFiles
+rm -rf CMakeCache.txt
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}  -DLIB_INSTALL_DIR:PATH=%{_libdir} -DTARGET=%{?tizen_profile_name}
 
 make %{?jobs:-j%jobs}
 
@@ -53,10 +68,11 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 
 %postun
 
-%files 
+%files
+%manifest %{name}.manifest
+%{_sysconfdir}/smack/accesses.d/%{name}.rule
 %defattr(-,root,root,-)
 %{_libdir}/scim-1.0/1.4.0/Helper/ise-default.so
-%{_libdir}/scim-1.0/1.4.0/SetupUI/ise-default-setup.so
 %{_datadir}/isf/ise/ise-default/*
 %{_datadir}/packages/*
 %{_datadir}/locale/*

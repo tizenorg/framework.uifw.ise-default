@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "စမတ္ ျဖည့္သြင္းအရာ လုပ္ေဆာင္ခ်က္မ်ား"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "အလိုလို အၾကီးလုပ္"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "ျပန္သတ္မွတ္ပါ"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Qwerty keyboard"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "စာေၾကာင္းတိုင္း၏ အစ စာလံုးကို အလိုလို စာလုံးႀကီးအျဖစ္သို႔ ျပဳလုပ္ပါ။"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ၿပီးပါၿပီ"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "ေထာက္ပံ့မႈေပးေသာ ဘာသာစကား အေရအတြက္ (%d) ခုသို႔ ေရာက္ေနၿပီ။"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ေနာက္"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 ကီးဘုတ္"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "တုန္ခါျခင္း"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "အသံ"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ျဖည့္သြင္း ဘာသာစကားမ်ား ေရြးပါ"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ကာရိုက္တာ ႀကိဳတင္ၾကည့္ရႈျခင္း"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "အလိုအေလ်ာက္ ပုဒ္ျဖတ္ပုဒ္ရပ္"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "ကီး-တပ္ တုန္႔ျပန္မႈ"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ထည့္သြင္းရန္ ဘာသာစကားမ်ား"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ဆိုင္းအင္"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ပို႔ပါ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ရွာပါ"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ေလာ့အင္"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ပါဝင္ပါ"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "သြားပါ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "သင့္ကီးဘုတ္ ဆက္တင္မ်ားထဲမွာ အနည္းဆံုး ဘာသာစကားတစ္ခု ေရြးရမည္။"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Qwerty ကီးဘုတ္တခုအေပၚရွိ ခလုတ္တခုကို ေခါက္သည့္အခါ ႀကီးမားေသာစာလံုးပူေပါင္းတခု ျပပါ။"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "ခန္႔မွန္းႏုိင္ေသာ စာသား"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "ကီးဘုတ္ အမ်ဳိးအစား"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "ကီးဘုတ္သတ္မွတ္ခ်က္မ်ား"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "ဖူးစေတာ့ ထည့္ရန္အတြက္ စေပ့ဘားကို ႏွစ္ခ်က္ႏွိပ္ပါ။"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "သတိ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "အုိေက"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "ပယ္ဖ်က္"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "ေနာက္ထပ္ သတ္မွတ္ခ်က္မ်ား"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "ကီးပက္ သတ္မွတ္ခ်က္မ်ား ျပန္သတ္မွတ္မည္။ ဆက္လုပ္မလား?"
+

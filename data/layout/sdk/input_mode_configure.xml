@@ -510,6 +510,12 @@
       <landscape>LYT_LANDSCAPE_3X4_TELEPHONE.xml</landscape>
     </layouts>
   </mode>
+  <mode name="PHONE_3X4_SYM">
+    <layouts>
+      <portrait>LYT_PORTRAIT_3X4_TELEPHONE_SYM.xml</portrait>
+      <landscape>LYT_LANDSCAPE_3X4_TELEPHONE_SYM.xml</landscape>
+    </layouts>
+  </mode>
   <mode name="IPv6_3X4_123">
     <layouts>
       <portrait>LYT_PORTRAIT_3X4_IPv6_123.xml</portrait>
@@ -558,6 +564,18 @@
       <landscape>LYT_LANDSCAPE_3X4_DATETIME.xml</landscape>
     </layouts>
   </mode>
+  <mode name="PASSWD_3X4">
+    <layouts>
+      <portrait>LYT_PORTRAIT_3X4_PASSWD.xml</portrait>
+      <landscape>LYT_LANDSCAPE_3X4_PASSWD.xml</landscape>
+    </layouts>
+  </mode>
+  <mode name="EMOTICON_LAYOUT">
+    <layouts>
+      <portrait>LYT_PORTRAIT_EMOTICON.xml</portrait>
+      <landscape>LYT_LANDSCAPE_EMOTICON.xml</landscape>
+    </layouts>
+  </mode>
   <mode name="EMOTICON_POPUP" dim_window="true">
     <layouts>
       <portrait>LYT_EMOTICON_POPUP.xml</portrait>
@@ -566,14 +584,20 @@
   </mode>
   <mode name="PUNCTUATION_POPUP" dim_window="true">
     <layouts>
-      <portrait>LYT_PUNCTUATION_POPUP.xml</portrait>
-      <landscape>LYT_PUNCTUATION_POPUP.xml</landscape>
+      <portrait>LYT_PORTRAIT_PUNCTUATION_POPUP.xml</portrait>
+      <landscape>LYT_LANDSCAPE_PUNCTUATION_POPUP.xml</landscape>
     </layouts>
   </mode>
   <mode name="URL_POPUP" dim_window="true">
     <layouts>
       <portrait>LYT_URL_POPUP.xml</portrait>
       <landscape>LYT_URL_POPUP.xml</landscape>
+    </layouts>
+  </mode>
+  <mode name="CM_POPUP" dim_window="true">
+    <layouts>
+      <portrait>LYT_CM_POPUP.xml</portrait>
+      <landscape>LYT_CM_POPUP.xml</landscape>
     </layouts>
   </mode>
 </input_mode_table>

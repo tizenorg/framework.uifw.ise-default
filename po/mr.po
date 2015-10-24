@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "स्मार्ट निविष्ट फंक्शन्स"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "स्‍वयं कॅपिटलाइझ"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "पुन्हा मांडणी करा"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "क्वेर्ठी कीबोर्ड"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "प्रत्येक वाक्याचा पहिला शब्द स्वयंचलितपणे कॅपिटलाइझ करा."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "झाले"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "समर्थित भाषांचे अधिकतम नंबर (%d) पोहोचले."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "पुढील"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 कीबोर्ड"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "कंपन"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ध्वनी"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "निविष्ट भाषा निवडा"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "वर्ण पूर्वदृश्य"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ऑटो उद्गारचिन्ह"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "की-टॅप प्रतिक्रिया"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "निविष्ट भाषा"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "साइन इन करा"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "पाठवा"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "शोधा"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "लॉग इन करा"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "सामील व्हा"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "जा"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "आपल्याला कीबोर्ड सेटिंग्स मधून कमीत कमी एक भाषा निवडावी लागेल."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "क्वेर्ठी कीबोर्ड टॅप केल्यानंतर एक मोठा वर्ण बबल दर्शवा."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "प्रेडिक्टिव्ह मजकूर"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "कीबोर्ड प्रकार"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "कीबोर्ड सेटिंग्स"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "स्पेस बार दोनदा टॅप करून स्वयंचलितपणे पूर्णविराम प्रविष्ट करा."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "लक्ष द्या"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ठीक"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "रद्द"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "अधिक सेटिंग्स"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "कीपॅड सेटिंग्स रीसेट केली जातील. सुरू ठेवायचे?"
+

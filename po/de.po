@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Intelligente Eingabefunktionen"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Autom. Großschreibung"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Zurücksetzen"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "QWERTZ-Tastatur"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Den ersten Buchstaben jedes Satzes automatisch groß schreiben."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "OK"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Maximale Anzahl an unterstützten Sprachen (%d) erreicht"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Weiter"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 - Tastatur"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Vibration"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Ton"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Eingabesprachen auswählen"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Zeichenvorschau"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Autom. Satzzeichen setzen"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Tastenfeedback"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Eingabesprachen"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Anmeld."
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Senden"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Suche"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Anmeld."
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Verkn."
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Öffnen"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Sie müssen in den Tastatureinstellungen mindestens eine Sprache auswählen."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Buchstaben vergrößert anzeigen, wenn eine Taste auf einer QWERTZ-Tastatur gedrückt wird."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Texterkennung"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Tastaturtyp"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Tastatur-Einstellungen"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Punkt automatisch durch zweimaliges Tippen auf die Leertaste einfügen."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Achtung"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Abbrechen"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Weitere Einstellungen"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Tastatureinstellungen werden zurückgesetzt. Fortfahren?"
+

@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "ฟังก์ชั่นการใส่ข้อมูลอัจฉริยะ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "เป็นตัวพิมพ์ใหญ่อัตโนมัติ"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "รีเซ็ท"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "แป้นพิมพ์ Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "เปลี่ยนตัวอักษรแรกของแต่ละประโยคเป็นตัวพิมพ์ใหญ่โดยอัตโนมัติ"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "เรียบร้อย"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "ถึงจำนวนสูงสุด (%d) ของภาษาที่รองรับแล้ว"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ถัดไป"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "แป้นพิมพ์ 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "ระบบสั่น"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "เสียง"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "เลือกภาษา​ที่ใช้ป้อน"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ตัวอย่าง​ตัว​อักษร"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ใส่วรรคตอนโดยอัตโนมัติ"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "การ​ตอบ​สนอง​เมื่อแตะที่ปุ่ม"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ภาษา​เขียน"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ไซน์อิน"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ส่ง"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ค้นหา"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ล็อกอิน"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ร่วม"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "ไป"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "คุณต้องเลือกอย่างน้อยหนึ่งภาษาในการตั้งค่าแป้นพิมพ์"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "แสดงกรอบตัวอักษรขนาดใหญ่ เมื่อสัมผัสคีย์บนแป้นพิมพ์ Qwerty"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "ข้อ​ความ​ล่วง​หน้า"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "ชนิด​แป้น​พิมพ์"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "การตั้งค่าแป้นพิมพ์"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "ใส่​เครื่อง​หมาย​ฟู​ลสต็อป​ (.) ​อัตโนมัติ​โดย​การ​เคาะ​ที่​ปุ่ม​สเปซ​บาร์​สอง​ครั้ง"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "โปรดทราบ"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ตกลง"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "ยกเลิก"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "การ​ตั้ง​ค่า​เพิ่ม​เติม"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "การ​ตั้ง​ค่า​ปุ่ม​กด​จะ​ถูก​ตั้ง​ค่า​ใหม่ ดำเนิน​การ​ต่อ?"
+

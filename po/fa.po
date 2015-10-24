@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "عملکردهای ورودی هوشمند"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "بزرگ کردن خودکار حرف اول"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "بازنشانی"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "صفحه کلید Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "به طور خودکار اولین حرف هر جمله بزرگ نوشته شود."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "انجام"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "تعداد زبان‌های پشتیبانی شده (%d) به حداکثر رسیده است."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "بعدی"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "صفحه کلید 3x4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "لرزاننده"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "صدا"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "انتخاب زبان های ورودی"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "پیش نمایش نویسه"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "نشانه گذاری خودکار"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "بازخورد ضربه روی کلید"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "زبان های ورودی"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ورود"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ارسال"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "جستجو"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ورود"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "پیوستن"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "برو"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "حداقل باید یک زبان را در تنظیمات صفحه کلید انتخاب کنید."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "یک کادر بزرگ نویسه هنگام ضربه زدن به کلیدی بر روی صفحه کلید QWERTY نمایش دهید."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "متن پیشگو"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "نوع صفحه کلید"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "تنظیمات صفحه کلید"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "با دو بار ضربه زدن روی نوار فاصله در بالا، یک نقطه به طور خودکار اضافه شود."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "توجه"
+
+msgid "IDS_ST_SK_OK"
+msgstr "تاييد"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "خیر"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "تنظیمات بیشتر"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "تنظیمات صفحه کلید بازنشانی می شود. ادامه می دهید؟"
+

@@ -1,0 +1,3 @@
+isf system::share x
+isf org.tizen.indicator_shm r
+isf tizen::vconf::setting rl

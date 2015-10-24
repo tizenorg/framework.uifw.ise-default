@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "មុខងារ​បញ្ចូល​វៃឆ្លាត"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ស្វ័យ​ដាក់​អក្សរធំ"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "កំណត់​ឡើងវិញ"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ក្ដារចុច Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ដាក់​អក្សរ​ពុម្ព​ធំ​ដោយ​ស្វ័យប្រវត្តិ​ចំពោះ​អក្សរ​ដំបូង​នៃ​ឃ្លា​នីមួយៗ។"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "រួចរាល់"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "បាន​ដល់​ចំនួន​អតិបរមា​នៃ​ភាសា​ដែល​បាន​គាំទ្រ (%d)។"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "បន្ទាប់"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "ក្ដារចុច 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "រំញ័រ"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "សំឡេង"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ជ្រើស​ភាសា​បញ្ចូល"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "ការបង្ហាញ​តួអក្សរ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ស្វ័យ​ដាក់​វណ្ណយុត្ត"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "រំញ័រ​ប៉ះ​គ្រាប់ចុច"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ភាសា​បញ្ចូល"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "ចុះ​ឈ្មោះ​ចូល"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "ផ្ញើ"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "ស្វែងរក"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ចុះ​ឈ្មោះ​ចូល"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ចូលរួម"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "ទៅ"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "អ្នក​ត្រូវតែ​ជ្រើស​ភាសា​មួយ​យ៉ាង​តិច​ក្នុង​ការកំណត់​ក្ដារចុច។"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "បង្ហាញ​ផ្ទាំង​តួអក្សរ​ធំ​មួយ នៅពេល​មាន​ការ​ប៉ះ​លើ​ប៊ូតុង​មួយ​នៃ​ក្ដារចុច Qwerty។"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "អត្ថបទ​ទាយ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "ប្រភេទ​ក្តារចុច"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "ការកំណត់​ក្ដារចុច"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "បញ្ចូល​ចំណុច​ខណ្ឌ​ដោយ​ស្វ័យប្រវត្តិ​ដោយ​ការប៉ះ​របារ​ដំណកឃ្លា​ពីរ​ដង។"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ប្រុងប្រយ័ត្ន"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ព្រម"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "បោះបង់"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "ការកំណត់​ច្រើន​ទៀត"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Keypad settings will be reset. Continue?"
+

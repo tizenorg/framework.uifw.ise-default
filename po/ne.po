@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "स्मार्ट इन्पुट फंक्शनहरू"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "स्वत: क्यापिटलाइज गर्नुहोस्"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "रिसेट"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "क्वेर्टी कीबोर्ड"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "प्रत्येक वाक्यको पहिलो अक्षरलाई स्वचालित रूपमा क्यापिटलाइज गर्नुहोस्।"
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "भयो"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "समर्थित भाषाहरूको अधिकतम संख्या (%d) पुग्यो।"
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "अर्को"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 कीबोर्ड"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "कम्पन"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ध्वनि"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "इन्पुट भाषाहरू चयन गर्नुहोस्"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "क्यारेक्टर पूर्वावलोकन"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "स्वतः विराम चिन्ह हाल्नुहोस्"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "कुञ्जी-ट्याप प्रतिक्रिया"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "इन्पुट भाषाहरू"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "साइन इन गर्नुहोस्"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "पठाउनुहोस्"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "खोज्‍नुहोस्"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "लग इन गर्नुहोस्"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "सहभागी हुनुहोस्"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "जानुहोस्"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "तपाईले कीबोर्ड सेटिङमा कम्तिमा एउटा भाषा चयन गर्नु पर्छ।"
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "क्वेर्टी कीबोर्ड ट्याप गरिएको बेला ठूलो वर्णको बबल देखाउनुहोस्।"
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "पूर्वानुमान पाठ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "कीबोर्ड प्रकार"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "कीबोर्ड सेटिङहरु"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "स्पेसबारमा दुईपटक ढकढकाएर स्वचालित रूपले पूर्ण विराम घुसाउनुहोस्।"
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ध्‍यान दिनुहोस्"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ठीक छ"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "रद्द"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "थप सेटिङहरु"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "कुञ्जीप्याड सेटिङहरू रिसेट हुन्छ। जारी गर्नुहोस्?"
+

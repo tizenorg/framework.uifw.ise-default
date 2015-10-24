@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "Fungsi Input cerdas"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "Kapitalisasi otomatis"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "Reset"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "Keyboard Qwerty"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "Otomatis mengkapitalkan huruf pertama dari setiap kalimat."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "Selesai"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "Jumlah maksimum bahasa yang didukung (%d) tercapai."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "Brkut"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "Keyboard 3 x 4"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "Getar"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "Suara"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "Pilih bahasa input"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "Tinjauan karakter"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "Tambah tandabaca otomatis"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "Umpan balik ketuk tombol"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "Bahasa masukan"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "Masuk"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "Kirim"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "Cari"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "Login"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "Gabung"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "Masuk"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Anda harus memilih setidaknya satu bahasa dalam pengaturan keyboard."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "Tampilkan gelembung karakter besar saat tombol pada keyboard Qwerty diketuk."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "Teks prediktif"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "Tipe papan tombol"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Pengaturan papan kunci"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "Otomatis masukkan titik dengan mengetuk tombol spasi dua kali."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "Perhatian"
+
+msgid "IDS_ST_SK_OK"
+msgstr "OK"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "Batal"
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "Pengaturan lainnya"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "Pengaturan papan tombol akan diatur ulang. Lanjutkan?"
+

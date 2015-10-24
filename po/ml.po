@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "സ്മാർട്ട് ഇൻപുട്ട് പ്രവർത്തനങ്ങൾ"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ഓട്ടോ കാപ്പിറ്റലൈസ്"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "പുനഃക്രമീകരിക്കുക"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ക്വർട്ടി കീബോര്‍ഡ്"
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "ഓരോ വാചകത്തിന്‍റെയും ആദ്യാക്ഷരം ഓട്ടോമാറ്റിക്കായി വലിയക്ഷരത്തിലാക്കുക."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "ചെയ്തു"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "പിന്തുണയ്ക്കുന്ന പരമാവധി ഭാഷകളുടെ (%d) എണ്ണത്തില്‍ എത്തി."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "അടുത്തത്"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 കീബോര്‍ഡ്"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "വൈബ്രേഷന്‍"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ശബ്ദം"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ഇന്‍പുട്ട് ഭാഷകള്‍ തിരഞ്ഞെടുക്കുക"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "കാരക്ടര്‍ പ്രിവ്യൂ"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "വിരാമമിടല്‍"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "കീ-സ്പർശന ഫീഡ്ബാക്ക്"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ഇന്‍പുട്ട് ഭാഷകള്‍"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "സൈന്‍ ഇന്‍ ചെയ്യുക"
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "അയയ്ക്കുക"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "തിരയുക"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "ലോഗിന്‍ ചെയ്യുക"
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "ചേരുക"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "പോകുക"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "കീബോര്‍ഡ് ക്രമീകരണങ്ങളില്‍ നിങ്ങള്‍ ഒരു ഭാഷയെങ്കിലും തിരഞ്ഞെടുത്തിരിക്കണം."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "ക്വർട്ടി കീബോര്‍ഡില്‍ ഒരു കീ ടാപ്പുചെയ്യുമ്പോള്‍ ഒരു വലിയ അക്ഷര ബബിള്‍ കാണിക്കുക."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "പ്രവചന ടെക്സ്റ്റ്‌"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "കീബോര്‍ഡ് തരം"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "കീബോര്‍ഡ് ക്രമീകരണങ്ങള്‍"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "സ്പേസ് ബാറില്‍ രണ്ടുതവണ തട്ടി ഓട്ടോമാറ്റിക് ആയി ഒരു പൂര്‍ണ്ണ വിരാമം നല്‍കുക."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "ശ്രദ്ധിക്കുക"
+
+msgid "IDS_ST_SK_OK"
+msgstr "ശരി"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "റദ്ദാക്കു."
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "കൂടുതല്‍ ക്രമീകരണങ്ങള്‍"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "കീപാഡ് സെറ്റിംഗ്സ് റാസെറ്റ് ചെയ്യപ്പെടും. തുടരണമോ?"
+

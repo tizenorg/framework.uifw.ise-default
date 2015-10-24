@@ -1,0 +1,99 @@
+msgid "IDS_IME_HEADER_SMART_INPUT_FUNCTIONS_ABB"
+msgstr "ස්මාර්ට් ආදාන ක්‍රියාදාම"
+
+msgid "IDS_IME_MBODY_AUTO_CAPITALISE"
+msgstr "ස්වයං මහකුරු කරන්න"
+
+msgid "IDS_IME_MBODY_RESET"
+msgstr "යළි සකසන්න"
+
+msgid "IDS_IME_OPT_QWERTY_KEYBOARD_ABB"
+msgstr "ක්වර්ටි ඉංග්‍රීසි යතුරුපු."
+
+msgid "IDS_IME_SBODY_CAPITALISE_THE_FIRST_LETTER_OF_EACH_SENTENCE_AUTOMATICALLY"
+msgstr "එක් එක් වාක්‍යයේ පළමු අකුර ස්වයංක්‍රියව මහකුරු කරන්න."
+
+msgid "IDS_IME_SK_DONE_ABB"
+msgstr "නිමයි"
+
+msgid "IDS_IME_POP_MAXIMUM_NUMBER_OF_SUPPORTED_LANGUAGES_HPD_REACHED"
+msgstr "සහය දක්වන භාෂා ගණනේ උපරිමට (%d) ට ළඟාවිය."
+
+msgid "IDS_IME_OPT_NEXT_ABB"
+msgstr "ඊළඟ"
+
+msgid "IDS_IME_OPT_3_X_4_KEYBOARD"
+msgstr "3 x 4 යතුරුපුවරුව"
+
+msgid "IDS_IME_MBODY_VIBRATION"
+msgstr "කම්පනය"
+
+msgid "IDS_IME_MBODY_SOUND"
+msgstr "ශබ්දය"
+
+msgid "IDS_IME_MBODY_SELECT_INPUT_LANGUAGES"
+msgstr "ආදාන භාෂා තෝරන්න"
+
+msgid "IDS_IME_MBODY_CHARACTER_PREVIEW"
+msgstr "අක්ෂර පෙරදැක්ම"
+
+msgid "IDS_IME_MBODY_AUTO_PUNCTUATE"
+msgstr "ස්වයං විරාම"
+
+msgid "IDS_IME_HEADER_KEY_TAP_FEEDBACK_ABB"
+msgstr "යතුර-තට්ටු කරන ප්‍රතිපෝෂණය"
+
+msgid "IDS_IME_HEADER_INPUT_LANGUAGES"
+msgstr "ආදාන භාෂා"
+
+msgid "IDS_IME_BUTTON_SIGN_IN_M_KEYBOARD"
+msgstr "පිවිසෙ."
+
+msgid "IDS_IME_BUTTON_SEND_M_KEYBOARD"
+msgstr "යවන්න"
+
+msgid "IDS_IME_BUTTON_SEARCH_M_KEYBOARD"
+msgstr "සොයන්න"
+
+msgid "IDS_IME_BUTTON_LOG_IN_M_KEYBOARD"
+msgstr "පිවිසෙ."
+
+msgid "IDS_IME_BUTTON_JOIN_M_KEYBOARD"
+msgstr "එක්වන්න"
+
+msgid "IDS_IME_BUTTON_GO_M_KEYBOARD"
+msgstr "යන්න"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "යතුරුපුවරු සැකසුම් වෙතින් ඔබ අවම වශයෙන් එක් භාෂාවක්වත් තේරිය යුතුය."
+
+msgid "IDS_IME_BODY_SHOW_A_BIG_CHARACTER_BUBBLE_WHEN_A_KEY_ON_A_QWERTY_KEYBOARD_IS_TAPPED"
+msgstr "ක්වර්ටි යතුරුපුවරුවේ යතුරක් මත තට්ටු වුනු විට විශාල අක්ෂර බුබුළක් පෙන්වන්න."
+
+msgid "IDS_IME_BODY_PREDICTIVE_TEXT"
+msgstr "පුරෝකථන පෙළ"
+
+msgid "IDS_IME_BODY_KEYBOARD_TYPE"
+msgstr "යතුරුපුවරු වර්ගය"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "යතුරුපුවරු සැකසුම්"
+
+msgid "IDS_IME_BODY_AUTOMATICALLY_INSERT_A_FULL_STOP_BY_TAPPING_THE_SPACE_BAR_TWICE"
+msgstr "හිස් ඉඩ යතුර දෙවරක් තට්ටු කිරීමෙන් ස්වයංක්‍රීයව නැවතීමේ තිතක් ඇතුල් කරන්න."
+
+msgid "IDS_IME_OPT_ATTENTION"
+msgstr "අවධානය යොමු කරන්න"
+
+msgid "IDS_ST_SK_OK"
+msgstr "හරි"
+
+msgid "IDS_ST_SK_CANCEL"
+msgstr "අව. කර."
+
+msgid "IDS_IME_HEADER_MORE_SETTINGS_ABB"
+msgstr "වැඩිදුර සැකසුම්"
+
+msgid "IDS_IME_BODY_KEYPAD_SETTINGS_WILL_BE_RESET_CONTINUE_Q"
+msgstr "යතුරුපුවරු සැකසුම් නැවතසැකසෙනු ඇත. ඉදිරියට යන්නද?"
+
